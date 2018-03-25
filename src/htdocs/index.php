@@ -18,6 +18,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>自動販売機</title>
 </head>
+<h1>自動販売機</h1>
 <body>
 <ul class="productsItems">
     <li class="productsItem">
