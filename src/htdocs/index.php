@@ -1,5 +1,12 @@
 <?php
 
+require_once 'system/functions.php';
+
+$pdo = get_db_connect();
+
+$drink_data = array();
+$drink_data =  get_drink_info($pdo);
+
 
 
 
@@ -22,7 +29,7 @@
     <script src="assets/js/script.js"></script>
 </head>
 <h1>自動販売機</h1>
-<body>
+<body class="index">
 <div class="container">
     <div class="container__inner">
         <ul class="productsItems">
