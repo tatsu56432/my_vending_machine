@@ -1,0 +1,120 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+v2.0 | 20110126
+License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/*  HTML5 display-role reset for older browsers
+*/
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul ,li{
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+h1{
+  margin: 30px 0;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.container{
+  &__inner{
+    width: 1280px;
+    background-color: red;
+    margin: auto;
+    padding: 20px;
+    .productsItems{
+      width: 1000px;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -webkit-flexbox;
+      display: -moz-flexbox;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: flex;
+      margin: auto;
+      .productsItem{
+        background-color: #fff;
+        border: 1px solid ;
+        &__inner{
+          width: 200px;
+          padding: 10px;
+          .thumbnail{
+            display: block;
+            overflow: hidden;
+            position: relative;
+            width:200px;
+            height: 200px;
+            max-width: 200px;
+            max-height: 200px;
+            margin: auto;
+            text-align: center;
+            img{
+              width: 100%;
+              height: auto;
+              /*画像のセンタリング（中央寄せ）*/
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              -webkit-transform: translate(-50%, -50%);
+              -ms-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+            }
+          }
+          .name{
+            margin-top: 20px;
+            text-align: center;
+          }
+          .price{
+            margin-top: 10px;
+            text-align: center;
+          }
+          .status{
+            margin-top: 10px;
+            text-align: center;
+          }
+        }
+
+      }
+    }
+  }
+}

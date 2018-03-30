@@ -1,7 +1,6 @@
 <?php
 
-
-function escape($vars){
+function escape ($vars) {
     if(is_array($vars)){
         return array_map("escape",$vars);
     }else{
@@ -10,7 +9,7 @@ function escape($vars){
 
 }
 
-function validateInput($input = NULL){
+function validateInput ($input = NULL) {
 
     if(!$input){
         $input = $_POST;
@@ -20,8 +19,6 @@ function validateInput($input = NULL){
     $address = isset($input['address']) ? $input['address'] : null;
     $name = isset($input['name']) ? $input['name'] : null;
     $email = isset($input['email']) ? $input['email'] : null;
-
-
 
 
 
