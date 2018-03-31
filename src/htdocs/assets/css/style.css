@@ -58,6 +58,10 @@ h1 {
   background-color: red;
   margin: auto;
   padding: 20px; }
+  .index .container__inner .formBlock {
+    width: 1000px;
+    margin: auto;
+    margin-bottom: 20px; }
   .index .container__inner .productsItems {
     width: 1000px;
     display: -webkit-flexbox;

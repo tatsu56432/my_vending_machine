@@ -1,34 +1,67 @@
 <?php
 session_start();
+
+require_once 'system/define.php';
 require_once 'system/functions.php';
 
 $submit = $_POST['submit'];
 $posted_drink_data = array();
-if (strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
+
     if ($submit) {
+        echo "ok";
         $product_name = isset($_SESSION['product_name']) ? $_POST['product_name'] : NULL;
         $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
         $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
-        $image = isset($_SESSION['image']) ? $_POST['image'] : NULL;
+        $image = isset($_SESSION['image']) ? $_FILES['image'] :  NULL;
         $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
 
 
-        $posted_drink_data['drink_name'] = $product_name;
-        $posted_drink_data['drink_price'] = $price;
-        $posted_drink_data['drink_num'] = $num;
-        $posted_drink_data['drink_img'] = $image;
+//      upload_img($image);
+
+
+
+
+//      if(isset($_FILES['image'])) {
+//            echo $_FILES['image']['type'];
+//            echo $tmp_file_data = bin2hex(file_get_contents($_FILES['image']['tmp_name']));
+//        }
+
+//        echo "<pre>";
+//        var_dump($_FILES);
+////        var_dump( getimagesize($_FILES['upload_file']['tmp_name']));
+////        var_dump( mime_content_type($_FILES['upload_file']['tmp_name']));
+//        echo "</pre>";
+
+        $posted_drink_data['product_name'] = $product_name;
+        $posted_drink_data['price'] = $price;
+        $posted_drink_data['num'] = $num;
+        $posted_drink_data['image'] = $image;
         $posted_drink_data['status'] = $status;
 
 
-        echo "<pre>";
-        var_dump($_POST);
-        echo "</pre>";
+        $error = validation($posted_drink_data);
 
+        if(count($error) > 0){
+            $data = array();
+            $data['error'] = $error;
+            escape($data['error']);
+            $_SESSION['product_name'] = isset($_POST['product_name']) ? $_POST['product_name'] : NULL;
+            $_SESSION['price'] = isset($_POST['price']) ? $_POST['price'] : NULL;
+            $_SESSION['num'] = isset($_POST['num']) ? $_POST['num'] : NULL;
+            $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
+
+
+        }else{
+
+            header("Location:" . TOOL_PAGE);
+            $_SESSION =array();
+            session_destroy();
+        }
 
     }
 
 
-}
+
 
 
 ?>
@@ -54,25 +87,25 @@ if (strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
 <div class="container">
     <div class="container__inner">
         <div class="formBlock">
-            <form action="" method="post" enctype=”multipart/form-data”>
+            <form action="" method="post" enctype ="multipart/form-data">
                 <div class="formBlock__item">
                     <label for="product_name">商品名</label>
                     <input type="text" name="product_name" value="<?php if ($_SESSION['product_name']) {
-                        echo $product_name;
+                        echo $_SESSION['product_name'];
                     } ?>" id="product_name">
                 </div>
 
                 <div class="formBlock__item">
                     <label for="price">値段</label>
-                    <input type="text" name="price" id="price" 　value="<?php if ($_SESSION['price']) {
-                        echo $price;
+                    <input type="text" name="price" id="price"  value="<?php if ($_SESSION['price']) {
+                        echo $_SESSION['price'];
                     } ?>">
                 </div>
 
                 <div class="formBlock__item">
                     <label for="num">個数</label>
                     <input type="text" name="num" id="num" value="<?php if ($_SESSION['num']) {
-                        echo $num;
+                        echo $_SESSION['num'];
                     } ?>">
                 </div>
                 <div class="formBlock__item">
@@ -83,8 +116,8 @@ if (strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
                 <div class="formBlock__item">
                     <label for="status">商品ステータス</label>
                     <select name="status" id="status">
-                        <option value="open" <?php if ($status == "true") echo "selected" ?> >公開</option>
-                        <option value="hidden" <?php if ($status == "false") echo "selected" ?>>非公開</option>
+                        <option value="open" <?php if ($_SESSION['status'] === "open") echo "selected" ?> >公開</option>
+                        <option value="hidden" <?php if ($_SESSION['status'] === "hidden") echo "selected" ?>>非公開</option>
                     </select>
                 </div>
 
@@ -96,86 +129,9 @@ if (strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
         <h2>商品情報変更</h2>
         <p>商品一覧</p>
         <ul class="productsItems js-productsItems">
-            <li class="productsItem ">
-                <dl>
-                    <dt>商品画像</dt>
-                    <dd>
-                        <p class="thumbnail js-thumbnail"><img src="assets/img/uploads/coke.jpg" alt=""></p>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>商品名</dt>
-                    <dd><p>コーラ</p></dd>
-                </dl>
-                <dl>
-                    <dt>価格</dt>
-                    <dd><p>100円</p></dd>
-                </dl>
-                <dl>
-                    <dt>在庫数</dt>
-                    <dd>
-                        <div class="stock">
-                            <form action="#" method="post">
-                                <p>
-                                    <input type="text" name="num">個
-                                </p>
-                                <p>
-                                    <input type="submit" name="submit" value="変更">
-                                </p>
-                            </form>
-                        </div>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>ステータス</dt>
-                    <dd>
-                        <form action="#" method="post">
-                            <button type="submit" name="status_btn" value="<?php   ?>">公開→非公開</button>
-                        </form>
-                    </dd>
-                </dl>
-            </li>
-
-            <li class="productsItem is-hidden">
-                <dl>
-                    <dt>商品画像</dt>
-                    <dd>
-                        <p class="thumbnail js-thumbnail"><img src="assets/img/uploads/coke.jpg" alt=""></p>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>商品名</dt>
-                    <dd><p>コーラ</p></dd>
-                </dl>
-                <dl>
-                    <dt>価格</dt>
-                    <dd><p>100円</p></dd>
-                </dl>
-                <dl>
-                    <dt>在庫数</dt>
-                    <dd>
-                        <div class="stock">
-                            <form action="#" method="post">
-                                <p>
-                                    <input type="text" name="num">個
-                                </p>
-                                <p>
-                                    <input type="submit" name="submit" value="変更">
-                                </p>
-                            </form>
-                        </div>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>ステータス</dt>
-                    <dd>
-                        <form action="#" method="post">
-                            <button type="submit" name="status_btn" value="<?php   ?>">公開→非公開</button>
-                        </form>
-                    </dd>
-                </dl>
-            </li>
-
+            <?php
+            display_productItem_tools();
+            ?>
         </ul>
 
     </div>
