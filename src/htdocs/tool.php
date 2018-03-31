@@ -6,9 +6,9 @@ require_once 'system/functions.php';
 $pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
 
-echo "<pre>";
-var_dump($drink_info);
-echo "</pre>";
+//echo "<pre>";
+//var_dump($drink_info);
+//echo "</pre>";
 
 
 $submit = $_POST['submit'];
@@ -84,6 +84,8 @@ if ($submit) {
 
 
         insert_drink_data($pdo,$insert_data ,$num_of_stock);
+
+
 
 //        $_SESSION = array();
 //        session_destroy();
@@ -167,8 +169,17 @@ if ($submit) {
         <p>商品一覧</p>
         <ul class="productsItems js-productsItems">
             <?php
-            display_productItem_tools();
+
+            $name_array = get_target_col($drink_info,'drink_name');
+            $price_array = get_target_col($drink_info,'drink_price');
+            $drink_img_path_array = get_target_col($drink_info,'drink_img_path');
+            $status_array = get_target_col($drink_info,'status');
+            $num_of_stock = get_target_col($drink_info,'num_of_stock');
+            display_productItem_tools($drink_info,$name_array,$price_array,$drink_img_path_array,$status_array,$num_of_stock);
+
             ?>
+
+
         </ul>
 
     </div>

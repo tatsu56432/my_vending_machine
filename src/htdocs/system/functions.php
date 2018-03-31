@@ -62,8 +62,9 @@ function get_db_data ($pdo) {
             'drink_name' => $row["drink_name"],
             'drink_price' => $row["drink_price"],
             'drink_img_path' => $row["drink_img_path"],
-            'date' => $row["date"],
-            'date' => $row["date"],
+            'created_at' => $row["created_at"],
+            'updated_at' => $row["updated_at"],
+            'status' => $row["status"]
         );
     }
     return $data;
@@ -105,6 +106,7 @@ function insert_drink_data($pdo,$drink_data,$stock){
         $_SESSION = array();
         session_destroy();
 
+
     }else{
         $error = 'データの挿入に失敗しました。';
         return $error;
@@ -140,25 +142,46 @@ function get_drink_info($pdo){
     return $data;
 }
 
-function display_productItem_tools(){
+function get_target_col ($data , $target) {
+    if(isset($data) && is_array($data)){
+        $arrTarget = array();
+        foreach ($data as $key1 => $val1){
+            foreach ($val1 as $key2 => $val2){
+                if($key2 == $target){
+                    $arrTarget[] = $val2;
+                }
+            }
+        }
+        return $arrTarget;
+    }elseif(empty($data)){
+        echo "データがありません";
+    }
+}
 
-    $img_path = "";
+function display_productItem_tools($data , $name_vars = NULL,$price_vars = NULL ,$drink_img_path_vars = NULL,$status_vars = NULL,$num_of_stock = NULL){
 
-    $productItem = <<<HTML
-                <li class="productsItem ">
+    $i = 0;
+    if(is_array($data) && isset($data)){
+        foreach ($data as $key => $val){
+
+            //公開非公開ステータス
+            $status_class[$i] = $status_vars[$i] == 0 ? "is-hidden" : NULL;
+
+            $productItem = <<<HTML
+                <li class="productsItem {$status_class[$i]}">
                 <dl>
                     <dt>商品画像</dt>
                     <dd>
-                        <p class="thumbnail js-thumbnail"><img src="{$img_path}" alt=""></p>
+                        <p class="thumbnail js-thumbnail"><img src="{$drink_img_path_vars[$i]}" alt=""></p>
                     </dd>
                 </dl>
                 <dl>
                     <dt>商品名</dt>
-                    <dd><p>コーラ</p></dd>
+                    <dd><p>{$name_vars[$i]}</p></dd>
                 </dl>
                 <dl>
                     <dt>価格</dt>
-                    <dd><p>100円</p></dd>
+                    <dd><p>{$price_vars[$i]}円</p></dd>
                 </dl>
                 <dl>
                     <dt>在庫数</dt>
@@ -166,10 +189,10 @@ function display_productItem_tools(){
                         <div class="stock">
                             <form action="#" method="post">
                                 <p>
-                                    <input type="text" name="num">個
+                                    <input type="text" name="num" value="">個
                                 </p>
                                 <p>
-                                    <input type="submit" name="submit" value="変更" form="formBlock">
+                                    <input type="submit" name="submit" value="modify" form="formBlock">
                                 </p>
                             </form>
                         </div>
@@ -179,18 +202,20 @@ function display_productItem_tools(){
                     <dt>ステータス</dt>
                     <dd>
                         <form action="#" method="post">
-                            <button type="submit" name="status_btn" value="" form="formBlock">公開→非公開</button>
+                            <button type="submit" name="status_btn" value="modify" form="formBlock">公開→非公開</button>
                         </form>
                     </dd>
                 </dl>
             </li>
 HTML;
-
-    echo $productItem;
+            $i++;
+            echo $productItem;
+        }
+    }
 }
 
 
-function display_productItem_indx(){
+function display_productItem_index(){
 
 }
 
