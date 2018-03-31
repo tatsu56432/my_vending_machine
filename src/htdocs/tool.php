@@ -12,9 +12,9 @@ if ($submit) {
     $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
     $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
     if (is_uploaded_file($_FILES["image"]["tmp_name"])){
-        $image = $_FILES['image'];
+        $image = $_FILES["image"];
     }else{
-        $image = NULL;
+        $image = false;
     }
 //    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
     $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
