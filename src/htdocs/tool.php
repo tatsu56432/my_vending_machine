@@ -8,11 +8,15 @@ $submit = $_POST['submit'];
 $posted_drink_data = array();
 
 if ($submit) {
-//    echo 'submit!!!';
     $product_name = isset($_SESSION['product_name']) ? $_POST['product_name'] : NULL;
     $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
     $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
-    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
+    if (is_uploaded_file($_FILES["image"]["tmp_name"])){
+        $image = $_FILES['image'];
+    }else{
+        $image = NULL;
+    }
+//    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
     $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
 
 //    echo "<pre>";
@@ -20,31 +24,15 @@ if ($submit) {
 //    echo "</pre>";
 
     $img_object = getimagesize($_FILES['image']['tmp_name']);
-    $img_name = rename_img($img_object , $image);
+    $new_img_object = rename_img($img_object , $image);
+    $upload_result = upload_img($new_img_object);
 
 
-    echo $img_name;
-
-
-//      upload_img($_FILES['image']);
-
-
-
-//      if(isset($_FILES['image'])) {
-//            echo $_FILES['image']['type'];
-//            echo $tmp_file_data = bin2hex(file_get_contents($_FILES['image']['tmp_name']));
-//        }
-
-//        echo "<pre>";
-//        var_dump($_FILES);
-////        var_dump( getimagesize($_FILES['upload_file']['tmp_name']));
-////        var_dump( mime_content_type($_FILES['upload_file']['tmp_name']));
-//        echo "</pre>";
 
     $posted_drink_data['product_name'] = $product_name;
     $posted_drink_data['price'] = $price;
     $posted_drink_data['num'] = $num;
-    $posted_drink_data['image'] = $image;
+    $posted_drink_data['image'] = $upload_result;
     $posted_drink_data['status'] = $status;
 
     $error = validation($posted_drink_data);

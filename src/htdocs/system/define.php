@@ -7,5 +7,5 @@ define("DB_USER_NAME","root");
 define("DB_PASS","password");
 
 //define page
-define("TOP_PAGE", 'index.php');
-define("TOOL_PAGE", 'tool.php');
+define("TOP_PAGE", '/index.php');
+define("TOOL_PAGE", '/tool.php');

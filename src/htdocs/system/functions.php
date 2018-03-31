@@ -16,51 +16,38 @@ function get_db_connect(){
 }
 
 
-function rename_img($img_array = array(),$img){
+function rename_img ($img_array = array(),$img = array()) {
+
     $extension_array = array(
         'gif' => 'image/gif',
         'jpg' => 'image/jpeg',
         'png' => 'image/png'
     );
+
     $img_extension = array_search($img_array['mime'], $extension_array,true);
     $format = '%s_%s.%s';
     $time = date('ymd');
     $sha1 = sha1(uniqid(mt_rand(),true));
     $new_file_name = sprintf($format,$time,$sha1, $img_extension);
+    $img["name"] = $new_file_name;
 
-    $new_name_img = rename (  $img , $new_file_name );
-
-    return $new_name_img;
+    return $img;
 
 }
 
-function upload_img($upload_img_file = array()){
+function upload_img ($uploaded_img_object = array()) {
 
-    $img_file = array();
-
-    $img_file = $upload_img_file;
-//画像ファイルデータを取得
-    $img_data = file_get_contents($img_file);
-//MIMEタイプの取得
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mime_type = finfo_buffer($finfo, $img_data);
-    finfo_close($finfo);
-//MIMEタイプの出力
-    echo $mime_type;
-//拡張子の配列（拡張子の種類を増やせば、画像以外のファイルでもOKです）
-    $extension_array = array(
-        'gif' => 'image/gif',
-        'jpg' => 'image/jpeg',
-        'png' => 'image/png'
-    );
-//MIMEタイプから拡張子を出力
-    if($img_extension = array_search($mime_type, $extension_array,true)){
-        //拡張子の出力
-        echo $img_extension;
+    if (is_uploaded_file($uploaded_img_object["image"]["tmp_name"])) {
+        if (move_uploaded_file($uploaded_img_object["image"]["tmp_name"],  "/assets/img/uploads/" . $uploaded_img_object["image"]["name"])) {
+            chmod("/assets/img/uploads/" . $uploaded_img_object["image"]["name"], 0644);
+            echo $uploaded_img_object["image"]["name"] . "をアップロードしました。";
+            return true;
+        } else {
+            echo "ファイルをアップロードできません。アップロード用のディレクトリのパーミッションを確認してください。";
+        }
+    } else {
+        return false;
     }
-
-
-
 
 }
 
@@ -204,9 +191,10 @@ function validation ($input = null) {
     }elseif (!is_numeric($num)){
         $error['price'] = '在庫数は数値で入力してください';
     }
-//    if(empty($image)) {
-//        $error['image'] = '画像を入力してください';
-//    }
+    if(empty($image)) {
+        $error['image'] = '画像を入力してください';
+    }
+
     if(empty($status)) {
         $error['status'] = 'ステータスを選択してください';
     }
