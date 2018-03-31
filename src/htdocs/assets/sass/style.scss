@@ -23,98 +23,227 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
 }
+
 /*  HTML5 display-role reset for older browsers
 */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
+
 body {
   line-height: 1;
 }
-ol, ul ,li{
+
+ol, ul, li {
   list-style: none;
 }
+
 blockquote, q {
   quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-h1{
+h1 {
   margin: 30px 0;
   font-size: 30px;
   font-weight: bold;
   text-align: center;
 }
 
-.container{
-  &__inner{
-    width: 1280px;
-    background-color: red;
-    margin: auto;
-    padding: 20px;
-    .productsItems{
-      width: 1000px;
-      display: -webkit-box;
-      display: -moz-box;
-      display: -webkit-flexbox;
-      display: -moz-flexbox;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: -moz-flex;
-      display: flex;
+.index {
+  .container {
+    &__inner {
+      width: 1280px;
+      background-color: red;
       margin: auto;
-      .productsItem{
-        background-color: #fff;
-        border: 1px solid ;
-        &__inner{
-          width: 200px;
-          padding: 10px;
-          .thumbnail{
-            display: block;
-            overflow: hidden;
-            position: relative;
-            width:200px;
-            height: 200px;
-            max-width: 200px;
-            max-height: 200px;
-            margin: auto;
-            text-align: center;
-            img{
-              width: 100%;
-              height: auto;
-              /*画像のセンタリング（中央寄せ）*/
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              -webkit-transform: translate(-50%, -50%);
-              -ms-transform: translate(-50%, -50%);
-              transform: translate(-50%, -50%);
+      padding: 20px;
+      .productsItems {
+        width: 1000px;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -webkit-flexbox;
+        display: -moz-flexbox;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: flex;
+        margin: auto;
+        .productsItem {
+          background-color: #fff;
+          border: 1px solid;
+          &__inner {
+            width: 200px;
+            padding: 10px;
+            .thumbnail {
+              display: block;
+              overflow: hidden;
+              position: relative;
+              width: 200px;
+              height: 200px;
+              max-width: 200px;
+              max-height: 200px;
+              margin: auto;
+              text-align: center;
+              img {
+                width: 100%;
+                height: auto;
+                /*画像のセンタリング（中央寄せ）*/
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+              }
+            }
+            .name {
+              margin-top: 20px;
+              text-align: center;
+            }
+            .price {
+              margin-top: 10px;
+              text-align: center;
+            }
+            .status {
+              margin-top: 10px;
+              text-align: center;
             }
           }
-          .name{
-            margin-top: 20px;
-            text-align: center;
-          }
-          .price{
-            margin-top: 10px;
-            text-align: center;
-          }
-          .status{
-            margin-top: 10px;
-            text-align: center;
-          }
-        }
 
+        }
       }
     }
   }
 }
+
+.tool {
+  h1 {
+
+  }
+  h2 {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .tool--ttl {
+    text-align: center;
+    font-size: 16px;
+  }
+  .container {
+    &__inner {
+      width: 1260px;
+      //background-color: red;
+      margin: auto;
+      padding: 20px;
+      .formBlock {
+        padding: 20px;
+        width: 500px;
+        margin: auto;
+        border: 2px solid #000;
+        .formBlock__item {
+          margin-top: 20px;
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+      }
+
+      .productsItems {
+        width: 1280px;
+        margin: auto;
+        .productsItem {
+          display: -webkit-box;
+          display: -moz-box;
+          display: -webkit-flexbox;
+          display: -moz-flexbox;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: -moz-flex;
+          display: flex;
+          width: 100%;
+          border-top: 1px solid #000;
+          border-left: 1px solid #000;
+          border-right: 1px solid #000;
+          &.is-hidden {
+            dl {
+              background-color: grey;
+              dt {
+                //display: none;
+              }
+              dd {
+              }
+            }
+          }
+          &:last-child {
+            border-bottom: 1px solid #000;
+          }
+          &:not(:first-child) {
+            dl {
+              dt {
+                display: none;
+              }
+              dd {
+
+              }
+            }
+          }
+          dl {
+            width: 25%;
+            //border-top: 1px solid #000;
+            //border-left: 1px solid #000;
+            //border-bottom: 1px solid #000;
+            border-right: 1px solid #000;
+            &:last-child {
+              border-right: 1px solid #000;
+            }
+            dt {
+              background-color: #fff;
+              padding: 10px;
+              border-bottom: 1px solid #000;
+            }
+            dd {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              & {
+                .thumbnail {
+                  display: block;
+                  overflow: hidden;
+                  position: relative;
+                  width: 200px;
+                  height: 200px;
+                  max-width: 200px;
+                  max-height: 200px;
+                  margin: auto;
+                  text-align: center;
+                  img {
+                    height: auto;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    -ms-transform: translate(-50%, -50%);
+                    transform: translate(-50%, -50%);
+                  }
+                }
+              }
+            }
+          }
+
+        }
+      }
+
+    }
+  }
+}
+

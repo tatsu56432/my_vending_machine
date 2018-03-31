@@ -57,7 +57,6 @@ function insert_drink_data($pdo,$drink_data){
     }
 }
 
-
 function escape ($vars) {
     if(is_array($vars)){
         return array_map("escape",$vars);

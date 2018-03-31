@@ -28,6 +28,11 @@ $(function () {
         });
     }
 
+    // $js_productsItems = $(".js-productsItems");
+    // $js_productsItem = $(".js-productsItems > li");
+    // $js_productsItemTarget =
+
+
 
 
 });

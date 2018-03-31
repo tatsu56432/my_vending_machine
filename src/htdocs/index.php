@@ -23,11 +23,13 @@ $drink_data =  get_drink_info($pdo);
     <meta name="viewport"  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>自動販売機</title>
+    <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.0.min.js"></script>
     <!--style-->
     <link rel="stylesheet" href="assets/css/style.css">
     <!--script-->
     <script src="assets/js/script.js"></script>
 </head>
+
 <h1>自動販売機</h1>
 <body class="index">
 <div class="container">

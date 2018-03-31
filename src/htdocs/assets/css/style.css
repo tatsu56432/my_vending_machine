@@ -53,12 +53,12 @@ h1 {
   font-weight: bold;
   text-align: center; }
 
-.container__inner {
+.index .container__inner {
   width: 1280px;
   background-color: red;
   margin: auto;
   padding: 20px; }
-  .container__inner .productsItems {
+  .index .container__inner .productsItems {
     width: 1000px;
     display: -webkit-flexbox;
     display: -moz-flexbox;
@@ -66,13 +66,13 @@ h1 {
     display: -moz-flex;
     display: flex;
     margin: auto; }
-    .container__inner .productsItems .productsItem {
+    .index .container__inner .productsItems .productsItem {
       background-color: #fff;
       border: 1px solid; }
-      .container__inner .productsItems .productsItem__inner {
+      .index .container__inner .productsItems .productsItem__inner {
         width: 200px;
         padding: 10px; }
-        .container__inner .productsItems .productsItem__inner .thumbnail {
+        .index .container__inner .productsItems .productsItem__inner .thumbnail {
           display: block;
           overflow: hidden;
           position: relative;
@@ -82,20 +82,95 @@ h1 {
           max-height: 200px;
           margin: auto;
           text-align: center; }
-          .container__inner .productsItems .productsItem__inner .thumbnail img {
+          .index .container__inner .productsItems .productsItem__inner .thumbnail img {
             width: 100%;
             height: auto;
+            /*画像のセンタリング（中央寄せ）*/
             position: absolute;
             top: 50%;
             left: 50%;
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%); }
-        .container__inner .productsItems .productsItem__inner .name {
+        .index .container__inner .productsItems .productsItem__inner .name {
           margin-top: 20px;
           text-align: center; }
-        .container__inner .productsItems .productsItem__inner .price {
+        .index .container__inner .productsItems .productsItem__inner .price {
           margin-top: 10px;
           text-align: center; }
-        .container__inner .productsItems .productsItem__inner .status {
+        .index .container__inner .productsItems .productsItem__inner .status {
           margin-top: 10px;
           text-align: center; }
+
+.tool h2 {
+  font-size: 25px;
+  font-weight: bold; }
+
+.tool .tool--ttl {
+  text-align: center;
+  font-size: 16px; }
+
+.tool .container__inner {
+  width: 1260px;
+  margin: auto;
+  padding: 20px; }
+  .tool .container__inner .formBlock {
+    padding: 20px;
+    width: 500px;
+    margin: auto;
+    border: 2px solid #000; }
+    .tool .container__inner .formBlock .formBlock__item {
+      margin-top: 20px; }
+      .tool .container__inner .formBlock .formBlock__item:first-child {
+        margin-top: 0; }
+  .tool .container__inner .productsItems {
+    width: 1280px;
+    margin: auto; }
+    .tool .container__inner .productsItems .productsItem {
+      display: -webkit-flexbox;
+      display: -moz-flexbox;
+      display: -ms-flexbox;
+      display: -moz-flex;
+      display: flex;
+      width: 100%;
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
+      border-right: 1px solid #000; }
+      .tool .container__inner .productsItems .productsItem.is-hidden dl {
+        background-color: grey; }
+      .tool .container__inner .productsItems .productsItem:last-child {
+        border-bottom: 1px solid #000; }
+      .tool .container__inner .productsItems .productsItem:not(:first-child) dl dt {
+        display: none; }
+      .tool .container__inner .productsItems .productsItem dl {
+        width: 25%;
+        border-right: 1px solid #000; }
+        .tool .container__inner .productsItems .productsItem dl:last-child {
+          border-right: 1px solid #000; }
+        .tool .container__inner .productsItems .productsItem dl dt {
+          background-color: #fff;
+          padding: 10px;
+          border-bottom: 1px solid #000; }
+        .tool .container__inner .productsItems .productsItem dl dd {
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-pack: center;
+              justify-content: center;
+          -ms-flex-align: center;
+              align-items: center; }
+          .tool .container__inner .productsItems .productsItem dl dd .thumbnail {
+            display: block;
+            overflow: hidden;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            max-width: 200px;
+            max-height: 200px;
+            margin: auto;
+            text-align: center; }
+            .tool .container__inner .productsItems .productsItem dl dd .thumbnail img {
+              height: auto;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              -ms-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%); }
