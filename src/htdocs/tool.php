@@ -7,17 +7,26 @@ require_once 'system/functions.php';
 $submit = $_POST['submit'];
 $posted_drink_data = array();
 
-    if ($submit) {
-        echo "ok";
-        $product_name = isset($_SESSION['product_name']) ? $_POST['product_name'] : NULL;
-        $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
-        $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
-        $image = isset($_SESSION['image']) ? $_FILES['image'] :  NULL;
-        $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
+if ($submit) {
+//    echo 'submit!!!';
+    $product_name = isset($_SESSION['product_name']) ? $_POST['product_name'] : NULL;
+    $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
+    $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
+    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
+    $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
+
+//    echo "<pre>";
+//    var_dump($_FILES['image']);
+//    echo "</pre>";
+
+    $img_object = getimagesize($_FILES['image']['tmp_name']);
+    $img_name = rename_img($img_object , $image);
 
 
-//      upload_img($image);
+    echo $img_name;
 
+
+//      upload_img($_FILES['image']);
 
 
 
@@ -32,36 +41,37 @@ $posted_drink_data = array();
 ////        var_dump( mime_content_type($_FILES['upload_file']['tmp_name']));
 //        echo "</pre>";
 
-        $posted_drink_data['product_name'] = $product_name;
-        $posted_drink_data['price'] = $price;
-        $posted_drink_data['num'] = $num;
-        $posted_drink_data['image'] = $image;
-        $posted_drink_data['status'] = $status;
+    $posted_drink_data['product_name'] = $product_name;
+    $posted_drink_data['price'] = $price;
+    $posted_drink_data['num'] = $num;
+    $posted_drink_data['image'] = $image;
+    $posted_drink_data['status'] = $status;
+
+    $error = validation($posted_drink_data);
+
+    if (count($error) > 0) {
+        $data = array();
+        $data['error'] = $error;
+        escape($data['error']);
+        $_SESSION['product_name'] = isset($_POST['product_name']) ? $_POST['product_name'] : NULL;
+        $_SESSION['price'] = isset($_POST['price']) ? $_POST['price'] : NULL;
+        $_SESSION['num'] = isset($_POST['num']) ? $_POST['num'] : NULL;
+        $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
 
 
-        $error = validation($posted_drink_data);
-
-        if(count($error) > 0){
-            $data = array();
-            $data['error'] = $error;
-            escape($data['error']);
-            $_SESSION['product_name'] = isset($_POST['product_name']) ? $_POST['product_name'] : NULL;
-            $_SESSION['price'] = isset($_POST['price']) ? $_POST['price'] : NULL;
-            $_SESSION['num'] = isset($_POST['num']) ? $_POST['num'] : NULL;
-            $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
 
 
-        }else{
+    } else {
 
-            header("Location:" . TOOL_PAGE);
-            $_SESSION =array();
-            session_destroy();
-        }
 
+
+
+        header("Location:" . TOOL_PAGE);
+        $_SESSION = array();
+        session_destroy();
     }
 
-
-
+}
 
 
 ?>
@@ -87,19 +97,21 @@ $posted_drink_data = array();
 <div class="container">
     <div class="container__inner">
         <div class="formBlock">
-            <form action="" method="post" enctype ="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
                 <div class="formBlock__item">
                     <label for="product_name">商品名</label>
                     <input type="text" name="product_name" value="<?php if ($_SESSION['product_name']) {
                         echo $_SESSION['product_name'];
                     } ?>" id="product_name">
+                    <?php if (isset($error['product_name'])) echo '<p class="error">' . $error['product_name'] . '</p>'; ?>
                 </div>
 
                 <div class="formBlock__item">
                     <label for="price">値段</label>
-                    <input type="text" name="price" id="price"  value="<?php if ($_SESSION['price']) {
+                    <input type="text" name="price" id="price" value="<?php if ($_SESSION['price']) {
                         echo $_SESSION['price'];
                     } ?>">
+                    <?php if (isset($error['price'])) echo '<p class="error">' . $error['price'] . '</p>'; ?>
                 </div>
 
                 <div class="formBlock__item">
@@ -107,6 +119,7 @@ $posted_drink_data = array();
                     <input type="text" name="num" id="num" value="<?php if ($_SESSION['num']) {
                         echo $_SESSION['num'];
                     } ?>">
+                    <?php if (isset($error['num'])) echo '<p class="error">' . $error['num'] . '</p>'; ?>
                 </div>
                 <div class="formBlock__item">
                     <label for="image">商品画像</label>
@@ -117,8 +130,10 @@ $posted_drink_data = array();
                     <label for="status">商品ステータス</label>
                     <select name="status" id="status">
                         <option value="open" <?php if ($_SESSION['status'] === "open") echo "selected" ?> >公開</option>
-                        <option value="hidden" <?php if ($_SESSION['status'] === "hidden") echo "selected" ?>>非公開</option>
+                        <option value="hidden" <?php if ($_SESSION['status'] === "hidden") echo "selected" ?>>非公開
+                        </option>
                     </select>
+                    <!--                    --><?php // if(isset($error['status'])) echo '<p class="error">'.$error['status'].'</p>';?>
                 </div>
 
                 <div class="formBlock__item">

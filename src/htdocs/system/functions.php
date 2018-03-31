@@ -15,7 +15,28 @@ function get_db_connect(){
     return $pdo;
 }
 
-function upload_img($upload_img_file){
+
+function rename_img($img_array = array(),$img){
+    $extension_array = array(
+        'gif' => 'image/gif',
+        'jpg' => 'image/jpeg',
+        'png' => 'image/png'
+    );
+    $img_extension = array_search($img_array['mime'], $extension_array,true);
+    $format = '%s_%s.%s';
+    $time = date('ymd');
+    $sha1 = sha1(uniqid(mt_rand(),true));
+    $new_file_name = sprintf($format,$time,$sha1, $img_extension);
+
+    $new_name_img = rename (  $img , $new_file_name );
+
+    return $new_name_img;
+
+}
+
+function upload_img($upload_img_file = array()){
+
+    $img_file = array();
 
     $img_file = $upload_img_file;
 //画像ファイルデータを取得
@@ -38,11 +59,7 @@ function upload_img($upload_img_file){
         echo $img_extension;
     }
 
-//    $format = '%s_%s.%s';
-//    $time = time();
-//    $sha1 = sha1(uniqid(mt_rand(),true));
-//    //$extはファイル連携時に取得した拡張子
-//    $file_path = sprintf($format,$time,$sha1,'.png');
+
 
 
 }
@@ -175,7 +192,7 @@ function validation ($input = null) {
     $error = array();
 
     if(empty($name)){
-        $error['name'] = '名前が入力されてません';
+        $error['product_name'] = '名前が入力されてません';
     }
     if(empty($price)) {
         $error['price'] = '値段が入力されていません';
@@ -187,9 +204,9 @@ function validation ($input = null) {
     }elseif (!is_numeric($num)){
         $error['price'] = '在庫数は数値で入力してください';
     }
-    if(empty($image)) {
-        $error['image'] = '画像を入力してください';
-    }
+//    if(empty($image)) {
+//        $error['image'] = '画像を入力してください';
+//    }
     if(empty($status)) {
         $error['status'] = 'ステータスを選択してください';
     }
