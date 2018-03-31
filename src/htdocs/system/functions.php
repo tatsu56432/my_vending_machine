@@ -16,6 +16,7 @@ function get_db_connect(){
 }
 
 
+//画像リネーム処理
 function rename_img ($img_array = array(),$img = array()) {
 
     $extension_array = array(
@@ -35,22 +36,24 @@ function rename_img ($img_array = array(),$img = array()) {
 
 }
 
+//画像アップロード処理
 function upload_img ($uploaded_img_object = array()) {
-
     if (is_uploaded_file($uploaded_img_object["tmp_name"])) {
         if (move_uploaded_file($uploaded_img_object["tmp_name"], $_SERVER["DOCUMENT_ROOT"] . "/assets/img/uploads/" . $uploaded_img_object["name"])) {
-            chmod("/assets/img/uploads/" . $uploaded_img_object["name"], 0644);
-            echo $uploaded_img_object["name"] . "をアップロードしました。";
-            return true;
+            chmod($_SERVER["DOCUMENT_ROOT"] . "/assets/img/uploads/" . $uploaded_img_object["name"], 0644);
+            $uploaded_img_path = "/assets/img/uploads/" . $uploaded_img_object["name"];
+            //echo $uploaded_img_object["name"] . "をアップロードしました。";
+            return $uploaded_img_path;
         } else {
             echo "ファイルをアップロードできません。アップロード用のディレクトリのパーミッションを確認してください。";
         }
     } else {
         return false;
     }
-
 }
 
+
+//tableへのデータ挿入処理
 function insert_drink_data($pdo,$drink_data){
     if(is_array($drink_data)){
         $id = NULL;

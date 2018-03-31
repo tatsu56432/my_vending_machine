@@ -1,38 +1,34 @@
 <?php
 session_start();
-
 require_once 'system/define.php';
 require_once 'system/functions.php';
 
+
+
 $submit = $_POST['submit'];
 $posted_drink_data = array();
+
+$pdo = get_db_connect();
+
 
 if ($submit) {
     $product_name = isset($_SESSION['product_name']) ? $_POST['product_name'] : NULL;
     $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
     $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
     if (is_uploaded_file($_FILES["image"]["tmp_name"])){
-        $image = $_FILES["image"];
+        $image = true;
     }else{
         $image = false;
     }
 //    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
     $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
 
-//    echo "<pre>";
-//    var_dump($_FILES['image']);
-//    echo "</pre>";
-
-    $img_object = getimagesize($_FILES['image']['tmp_name']);
-    $new_img_object = rename_img($img_object , $image);
-    $upload_result = upload_img($new_img_object);
-
 
 
     $posted_drink_data['product_name'] = $product_name;
     $posted_drink_data['price'] = $price;
     $posted_drink_data['num'] = $num;
-    $posted_drink_data['image'] = $upload_result;
+    $posted_drink_data['image'] = $image;
     $posted_drink_data['status'] = $status;
 
     $error = validation($posted_drink_data);
@@ -45,14 +41,26 @@ if ($submit) {
         $_SESSION['price'] = isset($_POST['price']) ? $_POST['price'] : NULL;
         $_SESSION['num'] = isset($_POST['num']) ? $_POST['num'] : NULL;
         $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
-
-
-
-
     } else {
 
+        //画像アップロード
+        if (is_uploaded_file($_FILES["image"]["tmp_name"])){
+            $img_object = getimagesize($_FILES['image']['tmp_name']);
+            $new_img_object = rename_img($img_object , $_FILES["image"]);
+            $img_uploaded_path = upload_img($new_img_object);
+        }
 
+        if($status === "open"){
+            $posted_drink_data['status'] = 1;
+        }else{
+            $posted_drink_data['status'] = 0;
+        }
 
+        $posted_drink_data['drink_img_path'] = $img_uploaded_path;
+        $posted_drink_data['created_at'] = date('Y-m-d H:i:s');
+        $posted_drink_data['updated_at'] = date('Y-m-d H:i:s');
+
+        insert_drink_data($pdo,$posted_drink_data);
 
         header("Location:" . TOOL_PAGE);
         $_SESSION = array();
@@ -112,6 +120,7 @@ if ($submit) {
                 <div class="formBlock__item">
                     <label for="image">商品画像</label>
                     <input type="file" name="image" id="image">
+                    <?php if (isset($error['image'])) echo '<p class="error">' . $error['image'] . '</p>'; ?>
                 </div>
 
                 <div class="formBlock__item">
