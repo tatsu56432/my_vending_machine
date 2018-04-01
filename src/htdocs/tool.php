@@ -85,8 +85,6 @@ if ($submit) {
 
         insert_drink_data($pdo,$insert_data ,$num_of_stock);
 
-
-
         $_SESSION = array();
         session_destroy();
 //
@@ -119,12 +117,16 @@ if($submit3){
     $product_id = isset($_POST['product_status_id']) ? $_POST['product_status_id'] : NULL;
     $status_reverse_value = isset($_POST['product_status_value']) ? $_POST['product_status_value'] : NULL;
 
+//    var_dump($product_id);
+//    var_dump($status_reverse_value);
 
-    if(!empty($product_id) && !empty($status_reverse_value)){
+
         $post_data['id'] = $product_id;
         $post_data['status_reverse_value'] = $status_reverse_value;
-        update_product_info($pdo,$post_data);
-    }
+//        var_dump($post_data);
+        update_drink_info($pdo,$post_data);
+
+
 
 }
 

@@ -97,7 +97,7 @@ function insert_drink_data($pdo, $drink_data, $stock)
         $stmt->bindParam(':drink_img_path', $drink_img_path, PDO::PARAM_STR);
         $stmt->bindParam(':created_at', $created_at, PDO::PARAM_STR);
         $stmt->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
         $stmt->execute();
 
 
@@ -124,14 +124,15 @@ function update_inventory_control($pdo, $update_data)
 
     if (is_array($update_data)) {
         $id = $update_data['id'];
-        $num_of_stock_changed = $update_data['num_of_stock_changed'];
+        $num_of_stock_changed = $update_data['num_of_sock_changed'];
+        $num_of_stock_changed = intval($num_of_stock_changed);
         $updated_at = date('Ymd');
-        $stmt = $pdo->query("SET NAMES utf8;");
-        $stmt = $pdo->prepare("UPDATE inventory_control SET num_of_stock = :num_of_srock , update_at = :updated_at WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':num_of_stock', $num_of_stock_changed, PDO::PARAM_STR);
-        $stmt->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt->execute();
+        $stmt3 = $pdo->query("SET NAMES utf8;");
+        $stmt3 = $pdo->prepare("UPDATE inventory_control SET num_of_stock = :num_of_stock , updated_at = :updated_at WHERE id = :id");
+        $stmt3->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt3->bindValue(':num_of_stock', $num_of_stock_changed, PDO::PARAM_INT);
+        $stmt3->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $stmt3->execute();
     } else {
         $error = 'データの挿入に失敗しました。';
         echo $error;
@@ -143,14 +144,16 @@ function update_drink_info($pdo, $update_data)
 
     if (is_array($update_data)) {
         $id = $update_data['id'];
+        var_dump($id);
         $status_reverse_value = $update_data['status_reverse_value'];
+        $status_reverse_value = intval($status_reverse_value);
         $updated_at = date('Ymd');
-        $stmt = $pdo->query("SET NAMES utf8;");
-        $stmt = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , update_at = :updated_at WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':status_reverse_value', $status_reverse_value, PDO::PARAM_STR);
-        $stmt->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt->execute();
+        $stmt4 = $pdo->query("SET NAMES utf8;");
+        $stmt4 = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , updated_at = :updated_at WHERE id = :id");
+        $stmt4->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt4->bindValue(':status_reverse_value', $status_reverse_value, PDO::PARAM_INT);
+        $stmt4->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $stmt4->execute();
     } else {
         $error = 'データの挿入に失敗しました。';
         echo $error;
@@ -240,7 +243,7 @@ function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $p
                                     <input type="text" name="num_of_stock_changed" value="">個
                                 </p>
                                 <p>
-                                    <input type="submit" name="submit2" value="submit2">
+                                    <input type="submit" name="submit2" value="在庫数更新">
                                 </p>
                             </form>
                         </div>
