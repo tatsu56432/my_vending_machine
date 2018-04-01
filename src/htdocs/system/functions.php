@@ -2,14 +2,15 @@
 
 require_once 'define.php';
 
-function get_db_connect(){
+function get_db_connect()
+{
     $dsn = 'mysql:dbname=' . DB_NAME . ';host=' . HOST . '';
     $user = DB_USER_NAME;
     $password = DB_PASS;
 //    $pdo = "";
-    try{
-        $pdo = new PDO($dsn,$user,$password);
-    }catch (PDOException $e){
+    try {
+        $pdo = new PDO($dsn, $user, $password);
+    } catch (PDOException $e) {
         echo 'Connection failed: ' . $e->getMessage();
     }
     return $pdo;
@@ -17,7 +18,8 @@ function get_db_connect(){
 
 
 //画像リネーム処理
-function rename_img ($img_array = array(),$img = array()) {
+function rename_img($img_array = array(), $img = array())
+{
 
     $extension_array = array(
         'gif' => 'image/gif',
@@ -25,11 +27,11 @@ function rename_img ($img_array = array(),$img = array()) {
         'png' => 'image/png'
     );
 
-    $img_extension = array_search($img_array['mime'], $extension_array,true);
+    $img_extension = array_search($img_array['mime'], $extension_array, true);
     $format = '%s_%s.%s';
     $time = date('ymd');
-    $sha1 = sha1(uniqid(mt_rand(),true));
-    $new_file_name = sprintf($format,$time,$sha1, $img_extension);
+    $sha1 = sha1(uniqid(mt_rand(), true));
+    $new_file_name = sprintf($format, $time, $sha1, $img_extension);
     $img["name"] = $new_file_name;
 
     return $img;
@@ -37,7 +39,8 @@ function rename_img ($img_array = array(),$img = array()) {
 }
 
 //画像アップロード処理
-function upload_img ($uploaded_img_object = array()) {
+function upload_img($uploaded_img_object = array())
+{
     if (is_uploaded_file($uploaded_img_object["tmp_name"])) {
         if (move_uploaded_file($uploaded_img_object["tmp_name"], $_SERVER["DOCUMENT_ROOT"] . "/assets/img/uploads/" . $uploaded_img_object["name"])) {
             chmod($_SERVER["DOCUMENT_ROOT"] . "/assets/img/uploads/" . $uploaded_img_object["name"], 0777);
@@ -53,12 +56,14 @@ function upload_img ($uploaded_img_object = array()) {
     }
 }
 
-function get_db_data ($pdo) {
+function get_db_data($pdo)
+{
     $data = array();
-    $stmt = $pdo -> query("SET NAMES utf8;");
+    $stmt = $pdo->query("SET NAMES utf8;");
     $stmt = $pdo->query("SELECT * FROM drink_info");
-    while($row = $stmt -> fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $data[] = array(
+            'id' => $row["id"],
             'drink_name' => $row["drink_name"],
             'drink_price' => $row["drink_price"],
             'drink_img_path' => $row["drink_img_path"],
@@ -72,10 +77,11 @@ function get_db_data ($pdo) {
 
 
 //tableへのデータ挿入処理
-function insert_drink_data($pdo,$drink_data,$stock){
-    if(is_array($drink_data)){
+function insert_drink_data($pdo, $drink_data, $stock)
+{
+    if (is_array($drink_data)) {
         $id = NULL;
-        $drink_name =$drink_data['product_name'];
+        $drink_name = $drink_data['product_name'];
         $drink_price = $drink_data['price'];
         $drink_img_path = $drink_data['drink_img_path'];
         $created_at = date('Ymd');
@@ -83,9 +89,9 @@ function insert_drink_data($pdo,$drink_data,$stock){
         $status = $drink_data['status'];
         $num_of_stock = $stock;
 
-        $stmt = $pdo -> query("SET NAMES utf8;");
-        $stmt = $pdo -> prepare("INSERT INTO drink_info (id , drink_name, drink_price , drink_img_path , created_at , updated_at, status) VALUES (:id , :drink_name , :drink_price , :drink_img_path , :created_at , :updated_at , :status)");
-        $stmt->bindValue(':id', $id , PDO::PARAM_INT);
+        $stmt = $pdo->query("SET NAMES utf8;");
+        $stmt = $pdo->prepare("INSERT INTO drink_info (id , drink_name, drink_price , drink_img_path , created_at , updated_at, status) VALUES (:id , :drink_name , :drink_price , :drink_img_path , :created_at , :updated_at , :status)");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':drink_name', $drink_name, PDO::PARAM_STR);
         $stmt->bindParam(':drink_price', $drink_price, PDO::PARAM_STR);
         $stmt->bindParam(':drink_img_path', $drink_img_path, PDO::PARAM_STR);
@@ -95,39 +101,70 @@ function insert_drink_data($pdo,$drink_data,$stock){
         $stmt->execute();
 
 
-        $stmt2 = $pdo -> query("SET NAMES utf8;");
-        $stmt2 = $pdo -> prepare("INSERT INTO inventory_control(id , num_of_stock, created_at , updated_at) VALUES (:id , :num_of_stock , :created_at , :updated_at)");
-        $stmt2->bindValue(':id', $id , PDO::PARAM_INT);
-        $stmt2->bindValue(':num_of_stock', $num_of_stock , PDO::PARAM_INT);
+        $stmt2 = $pdo->query("SET NAMES utf8;");
+        $stmt2 = $pdo->prepare("INSERT INTO inventory_control(id , num_of_stock, created_at , updated_at) VALUES (:id , :num_of_stock , :created_at , :updated_at)");
+        $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt2->bindValue(':num_of_stock', $num_of_stock, PDO::PARAM_INT);
         $stmt2->bindParam(':created_at', $created_at, PDO::PARAM_STR);
         $stmt2->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
         $stmt2->execute();
 
-        $_SESSION = array();
-        session_destroy();
+//        $_SESSION = array();
+//        session_destroy();
 
 
-    }else{
+    } else {
         $error = 'データの挿入に失敗しました。';
-        return $error;
+        echo $error;
     }
 }
 
-function insert_inventory_control () {
-    $id = NULL;
-    $num_of_stock = NULL;
+function update_inventory_control($pdo, $update_data)
+{
 
-
-
+    if (is_array($update_data)) {
+        $id = $update_data['id'];
+        $num_of_stock_changed = $update_data['num_of_stock_changed'];
+        $updated_at = date('Ymd');
+        $stmt = $pdo->query("SET NAMES utf8;");
+        $stmt = $pdo->prepare("UPDATE inventory_control SET num_of_stock = :num_of_srock , update_at = :updated_at WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':num_of_stock', $num_of_stock_changed, PDO::PARAM_STR);
+        $stmt->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $stmt->execute();
+    } else {
+        $error = 'データの挿入に失敗しました。';
+        echo $error;
+    }
 }
 
-function get_drink_info($pdo){
+function update_drink_info($pdo, $update_data)
+{
+
+    if (is_array($update_data)) {
+        $id = $update_data['id'];
+        $status_reverse_value = $update_data['status_reverse_value'];
+        $updated_at = date('Ymd');
+        $stmt = $pdo->query("SET NAMES utf8;");
+        $stmt = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , update_at = :updated_at WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':status_reverse_value', $status_reverse_value, PDO::PARAM_STR);
+        $stmt->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $stmt->execute();
+    } else {
+        $error = 'データの挿入に失敗しました。';
+        echo $error;
+    }
+}
+
+function get_drink_info($pdo)
+{
     $data = array();
-    $smtm = $pdo -> query("SET NAMES utf8;");
+    $smtm = $pdo->query("SET NAMES utf8;");
 
     //tableの内部結合
     $stmt = $pdo->query("SELECT drink_info.*,inventory_control.num_of_stock FROM drink_info INNER JOIN inventory_control ON drink_info.id = inventory_control.id");
-    while($row = $stmt -> fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $data[] = array(
             'id' => $row["id"],
             'drink_name' => $row["drink_name"],
@@ -142,30 +179,40 @@ function get_drink_info($pdo){
     return $data;
 }
 
-function get_target_col ($data , $target) {
-    if(isset($data) && is_array($data)){
+function get_target_col($data, $target)
+{
+    if (isset($data) && is_array($data)) {
         $arrTarget = array();
-        foreach ($data as $key1 => $val1){
-            foreach ($val1 as $key2 => $val2){
-                if($key2 == $target){
+        foreach ($data as $key1 => $val1) {
+            foreach ($val1 as $key2 => $val2) {
+                if ($key2 == $target) {
                     $arrTarget[] = $val2;
                 }
             }
         }
         return $arrTarget;
-    }elseif(empty($data)){
+    } elseif (empty($data)) {
         echo "データがありません";
     }
 }
 
-function display_productItem_tools($data , $name_vars = NULL,$price_vars = NULL ,$drink_img_path_vars = NULL,$status_vars = NULL,$num_of_stock = NULL){
+function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $price_vars = NULL, $drink_img_path_vars = NULL, $status_vars = NULL)
+{
 
     $i = 0;
-    if(is_array($data) && isset($data)){
-        foreach ($data as $key => $val){
+    if (is_array($data) && isset($data)) {
+        foreach ($data as $key => $val) {
 
-            //公開非公開ステータス
+            //非公開用のクラスをセット
             $status_class[$i] = $status_vars[$i] == 0 ? "is-hidden" : NULL;
+            //公開非公開用ボタンのvalueをセット
+            $status_reverse_value = array();
+            if ($status_vars[$i] === "0") {
+                $status_reverse_value[$i] = 1;
+            } else {
+                $status_reverse_value[$i] = 0;
+            }
+
 
             $productItem = <<<HTML
                 <li class="productsItem {$status_class[$i]}">
@@ -187,12 +234,13 @@ function display_productItem_tools($data , $name_vars = NULL,$price_vars = NULL 
                     <dt>在庫数</dt>
                     <dd>
                         <div class="stock">
-                            <form action="#" method="post">
+                            <form action="" method="post">
                                 <p>
-                                    <input type="text" name="num" value="">個
+                                    <input type="hidden" name="product_stock_id" value="{$id_vars[$i]}">
+                                    <input type="text" name="num_of_stock_changed" value="">個
                                 </p>
                                 <p>
-                                    <input type="submit" name="submit" value="modify" form="formBlock">
+                                    <input type="submit" name="submit2" value="submit2">
                                 </p>
                             </form>
                         </div>
@@ -201,9 +249,17 @@ function display_productItem_tools($data , $name_vars = NULL,$price_vars = NULL 
                 <dl>
                     <dt>ステータス</dt>
                     <dd>
-                        <form action="#" method="post">
-                            <button type="submit" name="status_btn" value="modify" form="formBlock">公開→非公開</button>
+                        <div class="status">
+                        <form action="" method="post">
+                        <p>
+                           <input type="hidden" name="product_status_id" value="{$id_vars[$i]}">
+                           <input type="hidden" name="product_status_value" value="{$status_reverse_value[$i]}">
+                        </p>
+                        <p>
+                        <button type="submit" name="submit3" value="submit3">公開→非公開</button>
+                        </p>
                         </form>
+                        </div>
                     </dd>
                 </dl>
             </li>
@@ -215,27 +271,31 @@ HTML;
 }
 
 
-function display_productItem_index(){
+function display_productItem_index()
+{
 
 }
 
-function display_product_result(){
+function display_product_result()
+{
 
 
 }
 
 
-function escape ($vars) {
-    if(is_array($vars)){
-        return array_map("escape",$vars);
-    }else{
-        return htmlspecialchars($vars ,ENT_QUOTES,'UTF-8');
+function escape($vars)
+{
+    if (is_array($vars)) {
+        return array_map("escape", $vars);
+    } else {
+        return htmlspecialchars($vars, ENT_QUOTES, 'UTF-8');
     }
 
 }
 
 
-function validation ($input = null) {
+function validation($input = null)
+{
 
     if (!$input) {
         $input = $_POST;
@@ -252,24 +312,24 @@ function validation ($input = null) {
     $price = trim($price);
     $error = array();
 
-    if(empty($name)){
+    if (empty($name)) {
         $error['product_name'] = '名前が入力されてません';
     }
-    if(empty($price)) {
+    if (empty($price)) {
         $error['price'] = '値段が入力されていません';
-    }elseif (!is_numeric($price)){
+    } elseif (!is_numeric($price)) {
         $error['price'] = '値段は数値で入力してください';
     }
-    if(empty($num)) {
+    if (empty($num)) {
         $error['num'] = '在庫数が入力されていません';
-    }elseif (!is_numeric($num)){
+    } elseif (!is_numeric($num)) {
         $error['price'] = '在庫数は数値で入力してください';
     }
-    if(empty($image)) {
+    if (empty($image)) {
         $error['image'] = '画像を入力してください';
     }
 
-    if(empty($status)) {
+    if (empty($status)) {
         $error['status'] = 'ステータスを選択してください';
     }
 

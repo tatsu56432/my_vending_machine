@@ -1,12 +1,12 @@
 <?php
 
+require_once 'system/define.php';
 require_once 'system/functions.php';
 
 $pdo = get_db_connect();
 
-$drink_data = array();
-$drink_data = get_drink_info($pdo);
-
+$pdo = get_db_connect();
+$drink_info = get_drink_info($pdo);
 
 ?>
 
@@ -59,7 +59,7 @@ $drink_data = get_drink_info($pdo);
                         <p class="status">
                             <?php if ($status === 1) echo $input_radio; ?>
 
-                            <input type="checkbox" name="">
+                            <input type="checkbox" name="" id="">
 
                         </p>
                     </div>

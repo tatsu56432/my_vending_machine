@@ -12,10 +12,10 @@ $drink_info = get_drink_info($pdo);
 
 
 $submit = $_POST['submit'];
+$submit2 = $_POST['submit2'];
+$submit3 = $_POST['submit3'];
+
 $posted_drink_data = array();
-
-
-
 
 if ($submit) {
 
@@ -87,14 +87,48 @@ if ($submit) {
 
 
 
-//        $_SESSION = array();
-//        session_destroy();
+        $_SESSION = array();
+        session_destroy();
 //
 //        header("Location:" . TOOL_PAGE);
 
     }
 
 }
+
+if($submit2){
+
+    $_POST = escape($_POST);
+    $post_data = array();
+
+    $product_id = isset($_POST['product_stock_id']) ? $_POST['product_stock_id'] : NULL;
+    $num_of_sock_changed = isset($_POST['num_of_stock_changed']) ? $_POST['num_of_stock_changed'] : NULL;
+
+    if(!empty($product_id) && !empty($num_of_sock_changed)){
+        $post_data['id'] = $product_id;
+        $post_data['num_of_sock_changed'] = $num_of_sock_changed;
+        update_inventory_control($pdo,$post_data);
+    }
+
+}
+
+if($submit3){
+
+    $_POST = escape($_POST);
+    $post_data = array();
+    $product_id = isset($_POST['product_status_id']) ? $_POST['product_status_id'] : NULL;
+    $status_reverse_value = isset($_POST['product_status_value']) ? $_POST['product_status_value'] : NULL;
+
+
+    if(!empty($product_id) && !empty($status_reverse_value)){
+        $post_data['id'] = $product_id;
+        $post_data['status_reverse_value'] = $status_reverse_value;
+        update_product_info($pdo,$post_data);
+    }
+
+}
+
+
 
 
 ?>
@@ -170,12 +204,13 @@ if ($submit) {
         <ul class="productsItems js-productsItems">
             <?php
 
+            $id_array = get_target_col($drink_info,'id');
             $name_array = get_target_col($drink_info,'drink_name');
             $price_array = get_target_col($drink_info,'drink_price');
             $drink_img_path_array = get_target_col($drink_info,'drink_img_path');
             $status_array = get_target_col($drink_info,'status');
-            $num_of_stock = get_target_col($drink_info,'num_of_stock');
-            display_productItem_tools($drink_info,$name_array,$price_array,$drink_img_path_array,$status_array,$num_of_stock);
+//            $num_of_stock = get_target_col($drink_info,'num_of_stock');
+            display_productItem_tools($drink_info,$id_array,$name_array,$price_array,$drink_img_path_array,$status_array);
 
             ?>
 
