@@ -6,10 +6,6 @@ require_once 'system/functions.php';
 $pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
 
-//echo "<pre>";
-//var_dump($drink_info);
-//echo "</pre>";
-
 
 $submit = $_POST['submit'];
 $submit2 = $_POST['submit2'];
