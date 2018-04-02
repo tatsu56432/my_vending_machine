@@ -87,7 +87,12 @@ if($submit_stock){
     $product_id = isset($_POST['product_stock_id']) ? $_POST['product_stock_id'] : NULL;
     $num_of_sock_changed = isset($_POST['num_of_stock_changed']) ? $_POST['num_of_stock_changed'] : NULL;
 
-    if(!empty($product_id) && !empty($num_of_sock_changed)){
+    if($num_of_stock){
+        var_dump($num_of_stock);
+        exit;
+    }
+
+    if(!empty($product_id) && isset($num_of_sock_changed)){
         $post_data['id'] = $product_id;
         $post_data['num_of_sock_changed'] = $num_of_sock_changed;
         update_inventory_control($pdo,$post_data);

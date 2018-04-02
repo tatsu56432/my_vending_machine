@@ -121,7 +121,7 @@ function insert_drink_data($pdo, $drink_data, $stock)
 
 function update_inventory_control($pdo, $update_data)
 {
-
+    echo "ok";
     if (is_array($update_data)) {
         $id = $update_data['id'];
         $num_of_stock_changed = $update_data['num_of_sock_changed'];
@@ -198,13 +198,12 @@ function get_target_col($data, $target)
     }
 }
 
+//管理ページ商品一覧出力用関数
 function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $price_vars = NULL, $drink_img_path_vars = NULL, $status_vars = NULL)
 {
-
     $i = 0;
     if (is_array($data) && isset($data)) {
         foreach ($data as $key => $val) {
-
             //非公開用のクラスをセット
             $status_class[$i] = $status_vars[$i] == 0 ? "is-hidden" : NULL;
             //公開非公開用ボタンのvalueをセット
@@ -214,7 +213,6 @@ function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $p
             } else {
                 $status_reverse_value[$i] = 0;
             }
-
 
             $productItem = <<<HTML
                 <li class="productsItem {$status_class[$i]}">
@@ -272,9 +270,34 @@ HTML;
     }
 }
 
-
-function display_productItem_index()
+//indexページ商品一覧出力用関数
+function display_productItem_index($data, $id_vars = NULL, $name_vars = NULL, $price_vars = NULL, $drink_img_path_vars = NULL, $status_vars = NULL, $num_of_stock_vars = NULL)
 {
+    $i = 0;
+    $status_element = array();
+    if (is_array($data) && isset($data)) {
+        foreach ($data as $key => $val) {
+            $status_element[$i] = $num_of_stock_vars[$i] == 0 ? "<p>売り切れ</p>" : "<input type=\"radio\" name=\"product_radio\" id=\"$id_vars[$i]\" value=\"$id_vars[$i]\">";
+            if ($status_vars[$i] == "1") {
+                continue;
+            } else {
+                $productsItem = <<<HTML
+                <li class="productsItem">
+                    <div class="productsItem__inner">
+                        <p class="thumbnail js-thumbnail"><img src="{$drink_img_path_vars[$i]}" alt="{$name_vars[$i]}"></p>
+                        <p class="name">{$name_vars[$i]}</p>
+                        <p class="price">{$price_vars[$i]}円</p>
+                        <div class="status">
+                         $status_element[$i]            
+                        </div>
+                    </div>
+                </li>
+HTML;
+                echo $productsItem;
+            }
+            $i++;
+        }
+    }
 
 }
 

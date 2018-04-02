@@ -4,9 +4,9 @@ require_once 'system/define.php';
 require_once 'system/functions.php';
 
 $pdo = get_db_connect();
-
 $pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
+
 
 ?>
 
@@ -29,59 +29,37 @@ $drink_info = get_drink_info($pdo);
 <body class="index">
 <div class="container">
     <div class="container__inner">
+        <form action="result.php" method="post">
 
-        <div class="formBlock">
-            <form method="post" form="purchase_post">
+
+            <div class="formBlock">
                 <label for="coin">お金</label>
                 <input type="text" name="coin" id="coin">
+            </div>
+
+
+            <form method="post" form="purchase_post">
+                <ul class="productsItems">
+                    <?php
+
+                    $id_array = get_target_col($drink_info, 'id');
+                    $name_array = get_target_col($drink_info, 'drink_name');
+                    $price_array = get_target_col($drink_info, 'drink_price');
+                    $drink_img_path_array = get_target_col($drink_info, 'drink_img_path');
+                    $status_array = get_target_col($drink_info, 'status');
+                    $num_of_stock = get_target_col($drink_info, 'num_of_stock');
+                    display_productItem_index($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array . $num_of_stock);
+
+                    ?>
+                </ul>
             </form>
-        </div>
 
 
-        <form method="post" form="purchase_post">
-            <ul class="productsItems">
-                <li class="productsItem">
-                    <div class="productsItem__inner">
-                        <p class="thumbnail js-thumbnail"><img src="assets/img/uploads/coke.jpg" alt=""></p>
-                        <p class="name">コーラ</p>
-                        <p class="price">100円</p>
-                        <div class="status">
-                            公開
-                        </div>
-                    </div>
-                </li>
+            <div class="purchaseBlock">
+                <input type="submit" name="submit_purchas" value="購入する" id="purchase_post">
+            </div>
 
-                <li class="productsItem">
-                    <div class="productsItem__inner">
-                        <p class="thumbnail js-thumbnail"><img src="assets/img/uploads/nomu_cheese.jpg" alt=""></p>
-                        <p class="name">飲むチーズ</p>
-                        <p class="price">140円</p>
-                        <p class="status">
-                            <?php if ($status === 1) echo $input_radio; ?>
-
-                            <input type="checkbox" name="" id="">
-
-                        </p>
-                    </div>
-                </li>
-
-                <!--            <li class="productsItem">-->
-                <!--                <div class="productsItem__inner">-->
-                <!--                    <p class="thumbnail js-thumbnail"><img src="assets/img/uploads/ramune.png" alt=""></p>-->
-                <!--                    <p class="name">ラムネ</p>-->
-                <!--                    <p class="price">100円</p>-->
-                <!--                    <p class="status">公開</p>-->
-                <!--                </div>-->
-                <!--            </li>-->
-            </ul>
         </form>
-
-
-        <div class="purchaseBlock">
-            <form action="result.php" method="post">
-                <input type="submit" value="購入する" id="purchase_post">
-            </form>
-        </div>
     </div>
 </div>
 
