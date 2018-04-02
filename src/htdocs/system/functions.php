@@ -139,6 +139,25 @@ function update_inventory_control($pdo, $update_data)
     }
 }
 
+
+function update_inventory_control_by_purchase($pdo,$update_product_id){
+
+
+    if (isset($update_product_id)) {
+        $id = $update_product_id;
+        $updated_at = date('Ymd');
+        $stmt4 = $pdo->query("SET NAMES utf8;");
+        $stmt4 = $pdo->prepare("UPDATE inventory_control SET num_of_stock = num_of_stock-1 , updated_at = :updated_at WHERE id = :id");
+        $stmt4->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt4->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $stmt4->execute();
+    } else {
+        $error = 'データの更新に失敗しました。';
+        echo $error;
+    }
+
+}
+
 function update_drink_info($pdo, $update_data)
 {
 
@@ -147,17 +166,18 @@ function update_drink_info($pdo, $update_data)
         $status_reverse_value = $update_data['status_reverse_value'];
         $status_reverse_value = intval($status_reverse_value);
         $updated_at = date('Ymd');
-        $stmt4 = $pdo->query("SET NAMES utf8;");
-        $stmt4 = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , updated_at = :updated_at WHERE id = :id");
-        $stmt4->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt4->bindValue(':status_reverse_value', $status_reverse_value, PDO::PARAM_INT);
-        $stmt4->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt4->execute();
+        $stmt5 = $pdo->query("SET NAMES utf8;");
+        $stmt5 = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , updated_at = :updated_at WHERE id = :id");
+        $stmt5->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt5->bindValue(':status_reverse_value', $status_reverse_value, PDO::PARAM_INT);
+        $stmt5->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $stmt5->execute();
     } else {
-        $error = 'データの挿入に失敗しました。';
+        $error = 'データの更新に失敗しました。';
         echo $error;
     }
 }
+
 
 function get_drink_info($pdo)
 {

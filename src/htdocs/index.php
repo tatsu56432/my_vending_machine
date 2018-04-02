@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once 'system/define.php';
 require_once 'system/functions.php';
@@ -7,7 +8,27 @@ $pdo = get_db_connect();
 $pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
 
-if($_SERVER['REQUEST_METHOD'] === "POST"){
+$_POST = escape($_POST);
+$submit_purchase = $_POST['submit_purchase'];
+if ($submit_purchase) {
+
+    $purchased_drink_id = isset($_POST['product_radio']) ? $_POST['product_radio'] : NULL;
+    $inputed_coin = isset($_POST['coin']) ? $_POST['coin'] : NULL;
+    $post_data[] = array(
+       'purchased_drink_id' => $purchased_drink_id,
+       'inputed_coin' => $purchased_drink_id,
+    );
+
+
+
+
+
+
+
+    update_inventory_control_by_purchase($pdo,$purchased_drink_id);
+
+//    header("Location:" . TOOL_PAGE);
+
 
 }
 
@@ -33,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 <body class="index">
 <div class="container">
     <div class="container__inner">
-        <form action="result.php" method="post">
+        <form action="" method="post">
 
 
             <div class="formBlock">
@@ -42,25 +63,23 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
             </div>
 
 
-            <form method="post" form="purchase_post">
-                <ul class="productsItems">
-                    <?php
+            <ul class="productsItems">
+                <?php
 
-                    $id_array = get_target_col($drink_info, 'id');
-                    $name_array = get_target_col($drink_info, 'drink_name');
-                    $price_array = get_target_col($drink_info, 'drink_price');
-                    $drink_img_path_array = get_target_col($drink_info, 'drink_img_path');
-                    $status_array = get_target_col($drink_info, 'status');
-                    $num_of_stock = get_target_col($drink_info, 'num_of_stock');
-                    display_productItem_index($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array , $num_of_stock);
+                $id_array = get_target_col($drink_info, 'id');
+                $name_array = get_target_col($drink_info, 'drink_name');
+                $price_array = get_target_col($drink_info, 'drink_price');
+                $drink_img_path_array = get_target_col($drink_info, 'drink_img_path');
+                $status_array = get_target_col($drink_info, 'status');
+                $num_of_stock = get_target_col($drink_info, 'num_of_stock');
+                display_productItem_index($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array, $num_of_stock);
 
-                    ?>
-                </ul>
-            </form>
+                ?>
+            </ul>
 
 
             <div class="purchaseBlock">
-                <input type="submit" name="submit_purchas" value="購入する" id="purchase_post">
+                <input type="submit" name="submit_purchase" value="購入する" id="purchase_post">
             </div>
 
         </form>

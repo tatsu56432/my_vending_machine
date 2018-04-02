@@ -9,7 +9,7 @@ $drink_info = get_drink_info($pdo);
 $_SESSION['product_name'] = isset($_POST['product_name']) ? $_POST['product_name'] : NULL;
 $_SESSION['price'] = isset($_POST['price']) ? $_POST['price'] : NULL;
 $_SESSION['num'] = isset($_POST['num']) ? $_POST['num'] : NULL;
-$_SESSION['image'] = isset($_FILES['image']) ? $_FILES['image'] : NULL;
+//$_SESSION['image'] = isset($_FILES['image']) ? $_FILES['image'] : NULL;
 $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : NULL ;
@@ -88,6 +88,7 @@ if($submit_stock){
         update_inventory_control($pdo,$post_data);
         header("Location:" . TOOL_PAGE);
     }
+
 }
 
 if($submit_status){
@@ -102,9 +103,6 @@ if($submit_status){
     update_drink_info($pdo,$post_data);
     header("Location:" . TOOL_PAGE);
 }
-
-
-
 
 ?>
 
