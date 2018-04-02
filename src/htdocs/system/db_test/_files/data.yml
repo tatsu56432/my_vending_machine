@@ -1,0 +1,17 @@
+drink_info:
+  -
+    id: 1
+    drink_name: "coke"
+    drink_price: "100"
+    drink_img_path: "/assets/img/uploads/test_01.jpg"
+    created_at: 20180402
+    updated_at: 20180402
+    status: 1
+  -
+    id: 2
+    drink_name: "tea"
+    drink_price: "200"
+    drink_img_path: "/assets/img/uploads/test_02.jpg"
+    created_at: 20180402
+    updated_at: 20180402
+    status: 0

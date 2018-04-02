@@ -1,4 +1,8 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\DbUnit\TestCaseTrait;
+
 abstract class Generic_Tests_DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 {
     static private $pdo = null;
@@ -16,7 +20,7 @@ abstract class Generic_Tests_DatabaseTestCase extends PHPUnit_Extensions_Databas
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }
+            return $this->conn;
 
-        return $this->conn;
     }
 }
