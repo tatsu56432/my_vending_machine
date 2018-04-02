@@ -7,6 +7,10 @@ $pdo = get_db_connect();
 $pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
 
+if($_SERVER['REQUEST_METHOD'] === "POST"){
+
+}
+
 
 ?>
 

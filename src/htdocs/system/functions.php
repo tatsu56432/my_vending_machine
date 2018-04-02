@@ -121,7 +121,7 @@ function insert_drink_data($pdo, $drink_data, $stock)
 
 function update_inventory_control($pdo, $update_data)
 {
-    echo "ok";
+
     if (is_array($update_data)) {
         $id = $update_data['id'];
         $num_of_stock_changed = $update_data['num_of_sock_changed'];

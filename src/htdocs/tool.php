@@ -31,8 +31,6 @@ if ($submit) {
 //    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
     $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
 
-
-
     $posted_drink_data['product_name'] = $product_name;
     $posted_drink_data['price'] = $price;
     $posted_drink_data['num'] = $num;
@@ -50,8 +48,6 @@ if ($submit) {
     } else {
 
         $insert_data = array();
-
-
         $insert_data['product_name'] = $product_name;
         $insert_data['price'] = $price;
         //画像アップロード
@@ -83,14 +79,8 @@ if($submit_stock){
 
     $_POST = escape($_POST);
     $post_data = array();
-
     $product_id = isset($_POST['product_stock_id']) ? $_POST['product_stock_id'] : NULL;
     $num_of_sock_changed = isset($_POST['num_of_stock_changed']) ? $_POST['num_of_stock_changed'] : NULL;
-
-    if($num_of_stock){
-        var_dump($num_of_stock);
-        exit;
-    }
 
     if(!empty($product_id) && isset($num_of_sock_changed)){
         $post_data['id'] = $product_id;
@@ -98,7 +88,6 @@ if($submit_stock){
         update_inventory_control($pdo,$post_data);
         header("Location:" . TOOL_PAGE);
     }
-
 }
 
 if($submit_status){
@@ -159,9 +148,11 @@ if($submit_status){
                     <input type="text" name="num" id="num" value="<?php if (isset($_SESSION['num'])) {echo $_SESSION['num'];} ?>">
                     <?php if (isset($error['num'])) echo '<p class="error">' . $error['num'] . '</p>'; ?>
                 </div>
+
                 <div class="formBlock__item">
                     <label for="image">商品画像</label>
                     <input type="file" name="image" id="image">
+                    <?php if (isset($error['image'])) echo '<p class="error">' . $error['image'] . '</p>'; ?>
                 </div>
 
                 <div class="formBlock__item">
