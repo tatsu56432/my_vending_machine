@@ -73,7 +73,7 @@ if ($submit) {
 
         $_SESSION = array();
         session_destroy();
-//        header("Location:" . TOOL_PAGE);
+        header("Location:" . TOOL_PAGE);
 
     }
 
@@ -91,6 +91,7 @@ if($submit_stock){
         $post_data['id'] = $product_id;
         $post_data['num_of_sock_changed'] = $num_of_sock_changed;
         update_inventory_control($pdo,$post_data);
+        header("Location:" . TOOL_PAGE);
     }
 
 }
@@ -105,7 +106,7 @@ if($submit_status){
     $post_data['id'] = $product_id;
     $post_data['status_reverse_value'] = $status_reverse_value;
     update_drink_info($pdo,$post_data);
-
+    header("Location:" . TOOL_PAGE);
 }
 
 
