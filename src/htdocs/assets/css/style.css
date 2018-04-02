@@ -66,13 +66,15 @@ h1 {
     margin: auto;
     margin-bottom: 20px; }
   .index .container__inner .productsItems {
-    width: 1000px;
+    width: 1110px;
     display: -webkit-flexbox;
     display: -moz-flexbox;
     display: -ms-flexbox;
     display: -moz-flex;
     display: flex;
-    margin: auto; }
+    margin: auto;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
     .index .container__inner .productsItems .productsItem {
       background-color: #fff;
       border: 1px solid; }

@@ -77,7 +77,7 @@ h1 {
         margin-bottom: 20px;
       }
       .productsItems {
-        width: 1000px;
+        width: 1110px;
         display: -webkit-box;
         display: -moz-box;
         display: -webkit-flexbox;
@@ -87,6 +87,7 @@ h1 {
         display: -moz-flex;
         display: flex;
         margin: auto;
+        flex-wrap: wrap;
         .productsItem {
           background-color: #fff;
           border: 1px solid;
