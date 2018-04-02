@@ -13,8 +13,8 @@ $_SESSION['image'] = isset($_FILES['image']) ? $_FILES['image'] : NULL;
 $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : NULL ;
-$submit2 = isset($_POST['submit2']) ? $_POST['submit2'] : NULL ;
-$submit3 = isset($_POST['submit3']) ? $_POST['submit3'] : NULL ;
+$submit_stock = isset($_POST['submit_stock']) ? $_POST['submit_stock'] : NULL ;
+$submit_status = isset($_POST['submit_status']) ? $_POST['submit_status'] : NULL ;
 
 $posted_drink_data = array();
 
@@ -79,7 +79,7 @@ if ($submit) {
 
 }
 
-if($submit2){
+if($submit_stock){
 
     $_POST = escape($_POST);
     $post_data = array();
@@ -95,7 +95,7 @@ if($submit2){
 
 }
 
-if($submit3){
+if($submit_status){
 
     $_POST = escape($_POST);
     $post_data = array();

@@ -1,0 +1,8 @@
+<phpunit>
+    <php>
+        <var name="DB_DSN" value="mysql:dbname=my_vending_machine;host=localhost" />
+        <var name="DB_USER" value="root" />
+        <var name="DB_PASSWD" value="password" />
+        <var name="DB_DBNAME" value="my_vending_machine" />
+    </php>
+</phpunit>

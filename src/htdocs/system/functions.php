@@ -144,7 +144,6 @@ function update_drink_info($pdo, $update_data)
 
     if (is_array($update_data)) {
         $id = $update_data['id'];
-        var_dump($id);
         $status_reverse_value = $update_data['status_reverse_value'];
         $status_reverse_value = intval($status_reverse_value);
         $updated_at = date('Ymd');
@@ -243,7 +242,7 @@ function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $p
                                     <input type="text" name="num_of_stock_changed" value="">個
                                 </p>
                                 <p>
-                                    <input type="submit" name="submit2" value="在庫数更新">
+                                    <input type="submit" name="submit_stock" value="在庫数更新">
                                 </p>
                             </form>
                         </div>
@@ -259,7 +258,7 @@ function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $p
                            <input type="hidden" name="product_status_value" value="{$status_reverse_value[$i]}">
                         </p>
                         <p>
-                        <button type="submit" name="submit3" value="submit3">公開→非公開</button>
+                        <button type="submit" name="submit_status" value="submit_status">公開→非公開</button>
                         </p>
                         </form>
                         </div>
@@ -326,7 +325,7 @@ function validation($input = null)
     if (empty($num)) {
         $error['num'] = '在庫数が入力されていません';
     } elseif (!is_numeric($num)) {
-        $error['price'] = '在庫数は数値で入力してください';
+        $error['num'] = '在庫数は数値で入力してください';
     }
     if (empty($image)) {
         $error['image'] = '画像を入力してください';
