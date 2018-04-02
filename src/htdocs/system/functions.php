@@ -277,8 +277,10 @@ function display_productItem_index($data, $id_vars = NULL, $name_vars = NULL, $p
     $status_element = array();
     if (is_array($data) && isset($data)) {
         foreach ($data as $key => $val) {
-            $status_element[$i] = $num_of_stock_vars[$i] == 0 ? "<p>売り切れ</p>" : "<input type=\"radio\" name=\"product_radio\" id=\"$id_vars[$i]\" value=\"$id_vars[$i]\">";
-            if ($status_vars[$i] == "1") {
+            $status_element[$i] = $num_of_stock_vars[$i] === 0 ? "<p>売り切れ</p>" : "<input type=\"radio\" name=\"product_radio\" id=\"$id_vars[$i]\" value=\"$id_vars[$i]\">";
+
+            if ($status_vars[$i] == "0") {
+                $i++;
                 continue;
             } else {
                 $productsItem = <<<HTML

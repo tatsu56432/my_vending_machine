@@ -48,7 +48,7 @@ $drink_info = get_drink_info($pdo);
                     $drink_img_path_array = get_target_col($drink_info, 'drink_img_path');
                     $status_array = get_target_col($drink_info, 'status');
                     $num_of_stock = get_target_col($drink_info, 'num_of_stock');
-                    display_productItem_index($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array . $num_of_stock);
+                    display_productItem_index($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array , $num_of_stock);
 
                     ?>
                 </ul>
