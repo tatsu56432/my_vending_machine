@@ -26,15 +26,12 @@ if ($submit_purchase) {
 
     if(count($error) > 0){
         $data['error'] = $error;
-        $_SESSION['product_radio'] = isset($purchased_drink_id) ? $_POST['product_radio'] : NULL;
-        $_SESSION['coin'] = isset($inputed_coin) ? $_POST['coin'] : NULL;
-//        header("Location:" . TOP_PAGE);
-//        header('location' . TOP_PAGE);
     }else{
+        $_SESSION['coin'] = isset($inputed_coin) ? $_POST['coin'] : NULL;
+        $_SESSION['product_radio'] = isset($purchased_drink_id) ? $_POST['product_radio'] : NULL;
         update_inventory_control_by_purchase($pdo,$purchased_drink_id);
+        header("Location:" . RESULT_PAGE);
     }
-
-//    header("Location:" . TOOL_PAGE);
 
 }
 
@@ -63,7 +60,7 @@ if ($submit_purchase) {
         <form action="" method="post">
             <div class="formBlock">
                 <label for="coin">お金</label>
-                <input type="text" name="coin" id="coin" value="<?php if($_SESSION['coin']) echo $_SESSION['coin']; ?>">
+                <input type="text" name="coin" id="coin" value="<?php if($_POST['coin']) echo $_POST['coin']; ?>">
                 <?php if(isset($error['coin'])){echo  '<p class="error">' . $error['coin'] .  '</p>';}elseif(isset($error['not_enough'])){echo '<p class="error">' . $error['not_enough'] . '</p>'; }?>
             </div>
             <ul class="productsItems">

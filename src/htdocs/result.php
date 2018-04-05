@@ -1,5 +1,12 @@
 <?php
+session_start();
 
+
+
+$_SESSION['coin'] = isset($_SESSION['coin']) ? $_SESSION['coin'] : NULL;
+$_SESSION['product_radio'] = isset($_SESSION['coin']) ? $_SESSION['product_radio'] : NULL;
+
+var_dump($_SESSION['coin'],$_SESSION['product_radio']);
 
 $_SESSION = array();
 session_destroy();
