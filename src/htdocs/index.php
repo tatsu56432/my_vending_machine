@@ -21,8 +21,9 @@ if ($submit_purchase) {
        'inputed_coin' => $inputed_coin,
     );
 
+
     //商品の値段を取得
-    $product_price = get_products_price($pdo,$purchased_drink_id);
+    $product_price = get_product_price($pdo,$purchased_drink_id);
 
     var_dump($product_price);
 

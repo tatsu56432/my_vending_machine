@@ -89,13 +89,14 @@ if ($submit_stock) {
     $error = validation_stock($post_data);
 
     if (count($error) > 0) {
+        $_SESSION['stock'] = isset($num_of_sock_changed) ? $num_of_sock_changed : NULL;
         $data = array();
         $data['error'] = $error;
         escape($data['error']);
     } else {
-        update_inventory_control($pdo, $post_data);
-        echo "在庫数の更新に成功しました。";
-
+        $success_message = update_inventory_control($pdo, $post_data);
+//        $_SESSION = array();
+//        session_destroy();
     }
 }
 
@@ -134,7 +135,10 @@ if ($submit_status) {
 
 <div class="container">
     <div class="container__inner">
-        <?php if (isset($error['stock'])) echo '<p class="error">' . $error['stock'] . '</p>'; ?>
+
+        <?php if (isset($error['stock'])) echo '<p class="error" style="text-align: center">' . $error['stock'] . '</p>'; ?>
+        <?php if (isset($success_message)) echo '<p style="text-align: center">' . $success_message .  '</p>'; ?>
+
         <div class="formBlock">
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="formBlock__item">

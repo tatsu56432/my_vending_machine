@@ -10,6 +10,7 @@ function get_db_connect()
 //    $pdo = "";
     try {
         $pdo = new PDO($dsn, $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo 'Connection failed: ' . $e->getMessage();
     }
@@ -131,6 +132,10 @@ function update_inventory_control($pdo, $update_data)
         $statement->bindValue(':num_of_stock', $num_of_stock_changed, PDO::PARAM_INT);
         $statement->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
         $statement->execute();
+
+        $success_message = '在庫数の更新に成功しました。';
+        return $success_message;
+
     } else {
         $error = 'データの挿入に失敗しました。';
         echo $error;
@@ -402,37 +407,15 @@ function validation_stock($input = NULL){
 
 
 //商品のidを使って商品の値段をtableから取得する 下記のインデックスページのvalidationで利用
-function get_products_price($pdo, $product_id)
+function get_product_price($pdo, $product_id)
 {
-    $result = array();
     $id = $product_id;
+    $id = intval($id);
     $statement = $pdo->query("SET NAMES utf8;");
-    $statement = $pdo->query("SELECT * FROM drink_info WHERE id = :id ");
-    $statement = $pdo->prepare($statement);
-    $statement->bindValue(':id', $id, PDO::PARAM_INT);
-    $statement->execute();
-
-    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-        $result[] = array(
-            'id' => $row["id"],
-            'drink_name' => $row["drink_name"],
-            'drink_price' => $row["drink_price"],
-            'drink_img_path' => $row["drink_img_path"],
-            'created_at' => $row["created_at"],
-            'updated_at' => $row["updated_at"],
-            'status' => $row["status"]
-        );
-    }
-
-//    $result = $statement->fetch();
-
-    var_dump($result) ;
-
-//    echo $statement->execute();
-//    $result = $statement->fetch();
-//    echo $result;
-//    return $result;
-
+    $statement = $pdo->prepare('SELECT drink_price FROM drink_info WHERE id = ?');
+    $statement->execute(array($id));
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result;
 }
 
 //indexページでのバリデーション処理
@@ -445,7 +428,7 @@ function validation_index($post_data, $product_price)
 
 
 //        $coin = trim($coin);
-        if (isset($product_id) || empty($coin)) {
+        if (!isset($product_id) || empty($coin)) {
             $error['empty'] = 'お金をいれるか、商品を選択してください。';
         }
 
