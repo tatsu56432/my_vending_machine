@@ -201,15 +201,15 @@ function get_drink_info($pdo)
 function get_target_column($data, $target)
 {
     if (isset($data) && is_array($data)) {
-        $arrTarget = array();
+        $arr_target = array();
         foreach ($data as $key => $data_array) {
             foreach ($data_array as $column_key => $val) {
-                if ($val == $target) {
-                    $arrTarget[] = $val;
+                if ($column_key == $target) {
+                    $arr_target[] = $val;
                 }
             }
         }
-        return $arrTarget;
+        return $arr_target;
     } elseif (empty($data)) {
         echo "データがありません";
     }
