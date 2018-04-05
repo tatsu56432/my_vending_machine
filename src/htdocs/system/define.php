@@ -23,4 +23,5 @@ define("DB_PASS","password");
 //define page
 define("TOP_PAGE", '/index.php');
 define("TOOL_PAGE", '/tool.php');
+define("RESULT_PAGE", '/result.php');
 }

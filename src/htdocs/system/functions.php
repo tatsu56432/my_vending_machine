@@ -138,7 +138,8 @@ function update_inventory_control($pdo, $update_data)
 }
 
 //購入による、在庫管理数のアップデート処理
-function update_inventory_control_by_purchase($pdo,$update_product_id){
+function update_inventory_control_by_purchase($pdo, $update_product_id)
+{
     if (isset($update_product_id)) {
         $id = $update_product_id;
         $updated_at = date('Ymd');
@@ -290,6 +291,7 @@ function display_productItem_index($data, $id_vars = NULL, $name_vars = NULL, $p
         foreach ($data as $key => $val) {
             $status_element[$i] = $num_of_stock_vars[$i] == "0" ? "<p>売り切れ</p>" : "<input type=\"radio\" name=\"product_radio\" id=\"$id_vars[$i]\" value=\"$id_vars[$i]\">";
 
+            //商品ステータスが0ならスキップ
             if ($status_vars[$i] == "0") {
                 $i++;
                 continue;
@@ -333,7 +335,7 @@ function escape($vars)
 }
 
 
-function validation($input = null)
+function validation_tool($input = null)
 {
 
     if (!$input) {
@@ -373,6 +375,31 @@ function validation($input = null)
     }
 
     return $error;
+}
+
+
+function validation_index($input)
+{
+
+    $error = array();
+    if (is_array($input) && isset($input)) {
+        $coin = isset($input['coin']) ? $input['coin'] : NULL;
+        $product_radio = isset($input['product_radio']) ? $input['product_radio'] : NULL;
+        $coin = trim($coin);
+
+        if (isset($product_radio) || empty($coin)) {
+            $error['empty'] = 'お金をいれるか、商品を選択してください。';
+        }
+
+        if (!is_int($coin)) {
+            $error['coin'] = 'お金は整数で入力してくださ。';
+        }
+
+
+        return $error;
+
+    }
+
 }
 
 

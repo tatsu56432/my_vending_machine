@@ -37,7 +37,7 @@ if ($submit) {
     $posted_drink_data['image'] = $image;
     $posted_drink_data['status'] = $status;
 
-    $error = validation($posted_drink_data);
+    $error = validation_tool($posted_drink_data);
 
     if (count($error) > 0) {
         $data = array();
@@ -181,10 +181,7 @@ if($submit_status){
             display_productItem_tools($drink_info,$id_array,$name_array,$price_array,$drink_img_path_array,$status_array);
 
             ?>
-
-
         </ul>
-
     </div>
 </div>
 

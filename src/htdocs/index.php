@@ -9,17 +9,34 @@ $pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
 
 $_POST = escape($_POST);
+
+
+
+
 $submit_purchase = $_POST['submit_purchase'];
 if ($submit_purchase) {
-
     $purchased_drink_id = isset($_POST['product_radio']) ? $_POST['product_radio'] : NULL;
     $inputed_coin = isset($_POST['coin']) ? $_POST['coin'] : NULL;
+
     $post_data[] = array(
        'purchased_drink_id' => $purchased_drink_id,
-       'inputed_coin' => $purchased_drink_id,
+       'inputed_coin' => $inputed_coin,
     );
 
-    update_inventory_control_by_purchase($pdo,$purchased_drink_id);
+    $error = validation_index($post_data);
+    if(count($error) > 0){
+        $data['error'] = $error;
+        $_SESSION['product_radio'] = isset($purchased_drink_id) ? $_POST['product_radio'] : NULL;
+        $_SESSION['coin'] = isset($inputed_coin) ? $_POST['coin'] : NULL;
+
+//        header('location' . TOP_PAGE);
+    }else{
+        update_inventory_control_by_purchase($pdo,$purchased_drink_id);
+    }
+
+
+
+
 
 //    header("Location:" . TOOL_PAGE);
 
@@ -53,7 +70,9 @@ if ($submit_purchase) {
 
             <div class="formBlock">
                 <label for="coin">お金</label>
-                <input type="text" name="coin" id="coin">
+                <input type="text" name="coin" id="coin" value="<?php if($_SESSION['coin']) echo $_SESSION['coin']; ?>">
+                <?php if(isset($error['coin']))  echo  '<p class="error">' . $error['coin'] .  '</p>';?>
+
             </div>
 
 
@@ -74,6 +93,7 @@ if ($submit_purchase) {
 
             <div class="purchaseBlock">
                 <input type="submit" name="submit_purchase" value="購入する" id="purchase_post">
+                <?php if(isset($error['empty']))  echo  '<p class="error">' . $error['empty'] .  '</p>';?>
             </div>
 
         </form>
