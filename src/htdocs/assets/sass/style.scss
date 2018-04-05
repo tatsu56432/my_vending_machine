@@ -68,7 +68,8 @@ h1 {
   .container {
     &__inner {
       width: 1280px;
-      background-color: red;
+
+      //background-color: red;
       margin: auto;
       padding: 20px;
       .formBlock{

@@ -378,26 +378,62 @@ function validation_tool($input = null)
 }
 
 
-function validation_index($input)
+//商品のidを使って商品の値段をtableから取得する 下記のインデックスページのvalidationで利用
+function get_products_price($pdo, $product_id)
 {
+    $result = array();
+    $id = $product_id;
+    $statement = $pdo->query("SET NAMES utf8;");
+    $statement = $pdo->query("SELECT * FROM drink_info WHERE id = :id ");
+    $statement = $pdo->prepare($statement);
+    $statement->bindValue(':id', $id, PDO::PARAM_INT);
+    $statement->execute();
 
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        $result[] = array(
+            'id' => $row["id"],
+            'drink_name' => $row["drink_name"],
+            'drink_price' => $row["drink_price"],
+            'drink_img_path' => $row["drink_img_path"],
+            'created_at' => $row["created_at"],
+            'updated_at' => $row["updated_at"],
+            'status' => $row["status"]
+        );
+    }
+
+//    $result = $statement->fetch();
+
+    var_dump($result) ;
+
+//    echo $statement->execute();
+//    $result = $statement->fetch();
+//    echo $result;
+//    return $result;
+
+}
+
+//indexページでのバリデーション処理
+function validation_index($post_data, $product_price)
+{
     $error = array();
-    if (is_array($input) && isset($input)) {
-        $coin = isset($input['coin']) ? $input['coin'] : NULL;
-        $product_radio = isset($input['product_radio']) ? $input['product_radio'] : NULL;
-        $coin = trim($coin);
+    if (is_array($post_data) && isset($post_data)) {
+        $coin = isset($post_data['coin']) ? $post_data['coin'] : NULL;
+        $product_id = isset($post_data['purchased_drink_id']) ? $post_data['purchased_drink_id'] : NULL;
 
-        if (isset($product_radio) || empty($coin)) {
+
+//        $coin = trim($coin);
+        if (isset($product_id) || empty($coin)) {
             $error['empty'] = 'お金をいれるか、商品を選択してください。';
         }
 
-        if (!is_int($coin)) {
-            $error['coin'] = 'お金は整数で入力してくださ。';
+        if (!isset($coin)) {
+            $error['coin'] = 'お金を投入してください。';
+        } elseif (!is_numeric($coin)) {
+            $error['coin'] = 'お金は整数で入力してください。';
+        } elseif ($coin < $product_price) {
+            $error['coin'] = '金額が足りません!!!';
         }
-
-
         return $error;
-
     }
 
 }

@@ -12,6 +12,8 @@
 <body>
 <p>自動販売機結果</p>
 
+<?php  var_dump($_POST); ?>
+
 <div class="puchase_result">
     <p class="thumbnail">
         <img src="assets/img/uploads/" alt="">

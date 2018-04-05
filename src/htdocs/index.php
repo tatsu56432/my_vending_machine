@@ -5,41 +5,40 @@ require_once 'system/define.php';
 require_once 'system/functions.php';
 
 $pdo = get_db_connect();
-$pdo = get_db_connect();
 $drink_info = get_drink_info($pdo);
-
 $_POST = escape($_POST);
 
-
-
-
 $submit_purchase = $_POST['submit_purchase'];
+
 if ($submit_purchase) {
     $purchased_drink_id = isset($_POST['product_radio']) ? $_POST['product_radio'] : NULL;
+    //$purchased_drink_id = intval($purchased_drink_id);
     $inputed_coin = isset($_POST['coin']) ? $_POST['coin'] : NULL;
+
 
     $post_data[] = array(
        'purchased_drink_id' => $purchased_drink_id,
        'inputed_coin' => $inputed_coin,
     );
 
-    $error = validation_index($post_data);
+    //商品の値段を取得
+    $product_price = get_products_price($pdo,$purchased_drink_id);
+
+//    var_dump($product_price);
+
+    $error = validation_index($post_data,$product_price);
+
     if(count($error) > 0){
         $data['error'] = $error;
         $_SESSION['product_radio'] = isset($purchased_drink_id) ? $_POST['product_radio'] : NULL;
         $_SESSION['coin'] = isset($inputed_coin) ? $_POST['coin'] : NULL;
-
+//        header("Location:" . TOP_PAGE);
 //        header('location' . TOP_PAGE);
     }else{
         update_inventory_control_by_purchase($pdo,$purchased_drink_id);
     }
 
-
-
-
-
 //    header("Location:" . TOOL_PAGE);
-
 
 }
 
