@@ -12,9 +12,9 @@ $_SESSION['num'] = isset($_POST['num']) ? $_POST['num'] : NULL;
 //$_SESSION['image'] = isset($_FILES['image']) ? $_FILES['image'] : NULL;
 $_SESSION['status'] = isset($_POST['status']) ? $_POST['status'] : NULL;
 
-$submit = isset($_POST['submit']) ? $_POST['submit'] : NULL ;
-$submit_stock = isset($_POST['submit_stock']) ? $_POST['submit_stock'] : NULL ;
-$submit_status = isset($_POST['submit_status']) ? $_POST['submit_status'] : NULL ;
+$submit = isset($_POST['submit']) ? $_POST['submit'] : NULL;
+$submit_stock = isset($_POST['submit_stock']) ? $_POST['submit_stock'] : NULL;
+$submit_status = isset($_POST['submit_status']) ? $_POST['submit_status'] : NULL;
 
 $posted_drink_data = array();
 
@@ -23,9 +23,9 @@ if ($submit) {
     $product_name = isset($_SESSION['product_name']) ? $_POST['product_name'] : NULL;
     $price = isset($_SESSION['price']) ? $_POST['price'] : NULL;
     $num = isset($_SESSION['num']) ? $_POST['num'] : NULL;
-    if (is_uploaded_file($_FILES["image"]["tmp_name"])){
+    if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
         $image = true;
-    }else{
+    } else {
         $image = false;
     }
 //    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
@@ -51,21 +51,21 @@ if ($submit) {
         $insert_data['product_name'] = $product_name;
         $insert_data['price'] = $price;
         //画像アップロード
-        if (is_uploaded_file($_FILES["image"]["tmp_name"])){
+        if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
             $img_object = getimagesize($_FILES['image']['tmp_name']);
-            $new_img_object = rename_img($img_object , $_FILES["image"]);
+            $new_img_object = rename_img($img_object, $_FILES["image"]);
             $img_uploaded_path = upload_img($new_img_object);
             $insert_data['drink_img_path'] = $img_uploaded_path;
         }
 
-        if($status === "open"){
+        if ($status === "open") {
             $insert_data['status'] = 1;
-        }else{
+        } else {
             $insert_data['status'] = 0;
         }
 
         $num_of_stock = $num;
-        insert_drink_data($pdo,$insert_data ,$num_of_stock);
+        insert_drink_data($pdo, $insert_data, $num_of_stock);
 
         $_SESSION = array();
         session_destroy();
@@ -75,23 +75,31 @@ if ($submit) {
 
 }
 
-if($submit_stock){
+if ($submit_stock) {
 
     $_POST = escape($_POST);
-    $post_data = array();
+
     $product_id = isset($_POST['product_stock_id']) ? $_POST['product_stock_id'] : NULL;
     $num_of_sock_changed = isset($_POST['num_of_stock_changed']) ? $_POST['num_of_stock_changed'] : NULL;
 
-    if(!empty($product_id) && isset($num_of_sock_changed)){
-        $post_data['id'] = $product_id;
-        $post_data['num_of_sock_changed'] = $num_of_sock_changed;
-        update_inventory_control($pdo,$post_data);
-        header("Location:" . TOOL_PAGE);
-    }
+    $post_data = array();
+    $post_data['id'] = $product_id;
+    $post_data['num_of_stock_changed'] = $num_of_sock_changed;
 
+    $error = validation_stock($post_data);
+
+    if (count($error) > 0) {
+        $data = array();
+        $data['error'] = $error;
+        escape($data['error']);
+    } else {
+        update_inventory_control($pdo, $post_data);
+        echo "在庫数の更新に成功しました。";
+
+    }
 }
 
-if($submit_status){
+if ($submit_status) {
 
     $_POST = escape($_POST);
     $post_data = array();
@@ -100,7 +108,7 @@ if($submit_status){
 
     $post_data['id'] = $product_id;
     $post_data['status_reverse_value'] = $status_reverse_value;
-    update_drink_info($pdo,$post_data);
+    update_drink_info($pdo, $post_data);
     header("Location:" . TOOL_PAGE);
 }
 
@@ -126,24 +134,30 @@ if($submit_status){
 
 <div class="container">
     <div class="container__inner">
+        <?php if (isset($error['stock'])) echo '<p class="error">' . $error['stock'] . '</p>'; ?>
         <div class="formBlock">
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="formBlock__item">
                     <label for="product_name">商品名</label>
-                    <input type="text" name="product_name" value="<?php if (isset($_SESSION['product_name'])) { echo $_SESSION['product_name'];
+                    <input type="text" name="product_name" value="<?php if (isset($_SESSION['product_name'])) {
+                        echo $_SESSION['product_name'];
                     } ?>">
                     <?php if (isset($error['product_name'])) echo '<p class="error">' . $error['product_name'] . '</p>'; ?>
                 </div>
 
                 <div class="formBlock__item">
                     <label for="price">値段</label>
-                    <input type="text" name="price" id="price" value="<?php if (isset($_SESSION['price'])) {echo $_SESSION['price'];} ?>">
+                    <input type="text" name="price" id="price" value="<?php if (isset($_SESSION['price'])) {
+                        echo $_SESSION['price'];
+                    } ?>">
                     <?php if (isset($error['price'])) echo '<p class="error">' . $error['price'] . '</p>'; ?>
                 </div>
 
                 <div class="formBlock__item">
                     <label for="num">個数</label>
-                    <input type="text" name="num" id="num" value="<?php if (isset($_SESSION['num'])) {echo $_SESSION['num'];} ?>">
+                    <input type="text" name="num" id="num" value="<?php if (isset($_SESSION['num'])) {
+                        echo $_SESSION['num'];
+                    } ?>">
                     <?php if (isset($error['num'])) echo '<p class="error">' . $error['num'] . '</p>'; ?>
                 </div>
 
@@ -167,18 +181,19 @@ if($submit_status){
                     <input type="submit" id="formBlock" value="商品追加" name="submit">
                 </div>
             </form>
+
         </div>
         <h2>商品情報変更</h2>
         <p>商品一覧</p>
         <ul class="productsItems js-productsItems">
             <?php
 
-            $id_array = get_target_column($drink_info,'id');
-            $name_array = get_target_column($drink_info,'drink_name');
-            $price_array = get_target_column($drink_info,'drink_price');
-            $drink_img_path_array = get_target_column($drink_info,'drink_img_path');
-            $status_array = get_target_column($drink_info,'status');
-            display_productItem_tools($drink_info,$id_array,$name_array,$price_array,$drink_img_path_array,$status_array);
+            $id_array = get_target_column($drink_info, 'id');
+            $name_array = get_target_column($drink_info, 'drink_name');
+            $price_array = get_target_column($drink_info, 'drink_price');
+            $drink_img_path_array = get_target_column($drink_info, 'drink_img_path');
+            $status_array = get_target_column($drink_info, 'status');
+            display_productItem_tools($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array);
 
             ?>
         </ul>

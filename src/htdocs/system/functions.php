@@ -122,7 +122,7 @@ function update_inventory_control($pdo, $update_data)
 {
     if (is_array($update_data)) {
         $id = $update_data['id'];
-        $num_of_stock_changed = $update_data['num_of_sock_changed'];
+        $num_of_stock_changed = $update_data['num_of_stock_changed'];
         $num_of_stock_changed = intval($num_of_stock_changed);
         $updated_at = date('Ymd');
         $statement = $pdo->query("SET NAMES utf8;");
@@ -347,6 +347,7 @@ function validation_tool($input = null)
     $num = isset($input['num']) ? $input['num'] : null;
     $image = isset($input['image']) ? $input['image'] : null;
     $status = isset($input['status']) ? $input['status'] : null;
+    $stock = isset($input['stock']) ? $input['stock'] : null;
 
 
     $name = trim($name);
@@ -374,7 +375,29 @@ function validation_tool($input = null)
         $error['status'] = 'ステータスを選択してください';
     }
 
+
     return $error;
+}
+
+//在庫数変更用formのバリデーション処理
+function validation_stock($input = NULL){
+
+    if (!$input) {
+        $input = $_POST;
+    }
+
+    $stock = isset($input['num_of_stock_changed']) ? $input['num_of_stock_changed'] : NULL;
+    $error = array();
+
+    if(!isset($stock)){
+        $error['stock'] = "在庫数を変更するには半角数字を入力してください。";
+    }
+    if(!preg_match("/^[0-9]+$/",$stock)){
+        $error['stock'] = "文字列は入力しないでください。";
+    }
+
+    return $error;
+
 }
 
 

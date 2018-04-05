@@ -24,7 +24,7 @@ if ($submit_purchase) {
     //商品の値段を取得
     $product_price = get_products_price($pdo,$purchased_drink_id);
 
-//    var_dump($product_price);
+    var_dump($product_price);
 
     $error = validation_index($post_data,$product_price);
 
