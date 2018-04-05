@@ -12,20 +12,15 @@ $submit_purchase = $_POST['submit_purchase'];
 
 if ($submit_purchase) {
     $purchased_drink_id = isset($_POST['product_radio']) ? $_POST['product_radio'] : NULL;
-    //$purchased_drink_id = intval($purchased_drink_id);
     $inputed_coin = isset($_POST['coin']) ? $_POST['coin'] : NULL;
-
 
     $post_data[] = array(
        'purchased_drink_id' => $purchased_drink_id,
        'inputed_coin' => $inputed_coin,
     );
 
-
     //商品の値段を取得
     $product_price = get_product_price($pdo,$purchased_drink_id);
-
-    var_dump($product_price);
 
     $error = validation_index($post_data,$product_price);
 
@@ -66,16 +61,11 @@ if ($submit_purchase) {
 <div class="container">
     <div class="container__inner">
         <form action="" method="post">
-
-
             <div class="formBlock">
                 <label for="coin">お金</label>
                 <input type="text" name="coin" id="coin" value="<?php if($_SESSION['coin']) echo $_SESSION['coin']; ?>">
-                <?php if(isset($error['coin']))  echo  '<p class="error">' . $error['coin'] .  '</p>';?>
-
+                <?php if(isset($error['coin'])){echo  '<p class="error">' . $error['coin'] .  '</p>';}elseif(isset($error['not_enough'])){echo '<p class="error">' . $error['not_enough'] . '</p>'; }?>
             </div>
-
-
             <ul class="productsItems">
                 <?php
 

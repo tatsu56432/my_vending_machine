@@ -1,3 +1,12 @@
+<?php
+
+
+$_SESSION = array();
+session_destroy();
+
+
+?>
+
 <!doctype html>
 <html lang="ja">
 <head>
