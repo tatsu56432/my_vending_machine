@@ -56,12 +56,14 @@ function upload_img($uploaded_img_object = array())
     }
 }
 
+
+//table drink_infoの行の取得処理
 function get_db_data($pdo)
 {
     $data = array();
-    $stmt = $pdo->query("SET NAMES utf8;");
-    $stmt = $pdo->query("SELECT * FROM drink_info");
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $statement = $pdo->query("SET NAMES utf8;");
+    $statement = $pdo->query("SELECT * FROM drink_info");
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $data[] = array(
             'id' => $row["id"],
             'drink_name' => $row["drink_name"],
@@ -76,7 +78,7 @@ function get_db_data($pdo)
 }
 
 
-//tableへのデータ挿入処理
+//table 個別商品用tableと在庫管理用のtableへのデータ挿入処理
 function insert_drink_data($pdo, $drink_data, $stock)
 {
     if (is_array($drink_data)) {
@@ -89,29 +91,25 @@ function insert_drink_data($pdo, $drink_data, $stock)
         $status = $drink_data['status'];
         $num_of_stock = $stock;
 
-        $stmt = $pdo->query("SET NAMES utf8;");
-        $stmt = $pdo->prepare("INSERT INTO drink_info (id , drink_name, drink_price , drink_img_path , created_at , updated_at, status) VALUES (:id , :drink_name , :drink_price , :drink_img_path , :created_at , :updated_at , :status)");
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':drink_name', $drink_name, PDO::PARAM_STR);
-        $stmt->bindParam(':drink_price', $drink_price, PDO::PARAM_STR);
-        $stmt->bindParam(':drink_img_path', $drink_img_path, PDO::PARAM_STR);
-        $stmt->bindParam(':created_at', $created_at, PDO::PARAM_STR);
-        $stmt->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
-        $stmt->execute();
+        $statement = $pdo->query("SET NAMES utf8;");
+        $statement = $pdo->prepare("INSERT INTO drink_info (id , drink_name, drink_price , drink_img_path , created_at , updated_at, status) VALUES (:id , :drink_name , :drink_price , :drink_img_path , :created_at , :updated_at , :status)");
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->bindParam(':drink_name', $drink_name, PDO::PARAM_STR);
+        $statement->bindParam(':drink_price', $drink_price, PDO::PARAM_STR);
+        $statement->bindParam(':drink_img_path', $drink_img_path, PDO::PARAM_STR);
+        $statement->bindParam(':created_at', $created_at, PDO::PARAM_STR);
+        $statement->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $statement->bindParam(':status', $status, PDO::PARAM_INT);
+        $statement->execute();
 
 
-        $stmt2 = $pdo->query("SET NAMES utf8;");
-        $stmt2 = $pdo->prepare("INSERT INTO inventory_control(id , num_of_stock, created_at , updated_at) VALUES (:id , :num_of_stock , :created_at , :updated_at)");
-        $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt2->bindValue(':num_of_stock', $num_of_stock, PDO::PARAM_INT);
-        $stmt2->bindParam(':created_at', $created_at, PDO::PARAM_STR);
-        $stmt2->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt2->execute();
-
-//        $_SESSION = array();
-//        session_destroy();
-
+        $statement = $pdo->query("SET NAMES utf8;");
+        $statement = $pdo->prepare("INSERT INTO inventory_control(id , num_of_stock, created_at , updated_at) VALUES (:id , :num_of_stock , :created_at , :updated_at)");
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->bindValue(':num_of_stock', $num_of_stock, PDO::PARAM_INT);
+        $statement->bindParam(':created_at', $created_at, PDO::PARAM_STR);
+        $statement->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $statement->execute();
 
     } else {
         $error = 'データの挿入に失敗しました。';
@@ -119,43 +117,40 @@ function insert_drink_data($pdo, $drink_data, $stock)
     }
 }
 
+//在庫数の変更に伴う在庫管理テーブル更新用の処理
 function update_inventory_control($pdo, $update_data)
 {
-
     if (is_array($update_data)) {
         $id = $update_data['id'];
         $num_of_stock_changed = $update_data['num_of_sock_changed'];
         $num_of_stock_changed = intval($num_of_stock_changed);
         $updated_at = date('Ymd');
-        $stmt3 = $pdo->query("SET NAMES utf8;");
-        $stmt3 = $pdo->prepare("UPDATE inventory_control SET num_of_stock = :num_of_stock , updated_at = :updated_at WHERE id = :id");
-        $stmt3->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt3->bindValue(':num_of_stock', $num_of_stock_changed, PDO::PARAM_INT);
-        $stmt3->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt3->execute();
+        $statement = $pdo->query("SET NAMES utf8;");
+        $statement = $pdo->prepare("UPDATE inventory_control SET num_of_stock = :num_of_stock , updated_at = :updated_at WHERE id = :id");
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->bindValue(':num_of_stock', $num_of_stock_changed, PDO::PARAM_INT);
+        $statement->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $statement->execute();
     } else {
         $error = 'データの挿入に失敗しました。';
         echo $error;
     }
 }
 
-
+//購入による、在庫管理数のアップデート処理
 function update_inventory_control_by_purchase($pdo,$update_product_id){
-
-
     if (isset($update_product_id)) {
         $id = $update_product_id;
         $updated_at = date('Ymd');
-        $stmt4 = $pdo->query("SET NAMES utf8;");
-        $stmt4 = $pdo->prepare("UPDATE inventory_control SET num_of_stock = num_of_stock-1 , updated_at = :updated_at WHERE id = :id");
-        $stmt4->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt4->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt4->execute();
+        $statement = $pdo->query("SET NAMES utf8;");
+        $statement = $pdo->prepare("UPDATE inventory_control SET num_of_stock = num_of_stock-1 , updated_at = :updated_at WHERE id = :id");
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $statement->execute();
     } else {
         $error = 'データの更新に失敗しました。';
         echo $error;
     }
-
 }
 
 function update_drink_info($pdo, $update_data)
@@ -166,12 +161,12 @@ function update_drink_info($pdo, $update_data)
         $status_reverse_value = $update_data['status_reverse_value'];
         $status_reverse_value = intval($status_reverse_value);
         $updated_at = date('Ymd');
-        $stmt5 = $pdo->query("SET NAMES utf8;");
-        $stmt5 = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , updated_at = :updated_at WHERE id = :id");
-        $stmt5->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt5->bindValue(':status_reverse_value', $status_reverse_value, PDO::PARAM_INT);
-        $stmt5->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
-        $stmt5->execute();
+        $statement = $pdo->query("SET NAMES utf8;");
+        $statement = $pdo->prepare("UPDATE drink_info SET status = :status_reverse_value , updated_at = :updated_at WHERE id = :id");
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->bindValue(':status_reverse_value', $status_reverse_value, PDO::PARAM_INT);
+        $statement->bindParam(':updated_at', $updated_at, PDO::PARAM_STR);
+        $statement->execute();
     } else {
         $error = 'データの更新に失敗しました。';
         echo $error;
@@ -185,8 +180,8 @@ function get_drink_info($pdo)
     $smtm = $pdo->query("SET NAMES utf8;");
 
     //tableの内部結合
-    $stmt = $pdo->query("SELECT drink_info.*,inventory_control.num_of_stock FROM drink_info INNER JOIN inventory_control ON drink_info.id = inventory_control.id");
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $statement = $pdo->query("SELECT drink_info.*,inventory_control.num_of_stock FROM drink_info INNER JOIN inventory_control ON drink_info.id = inventory_control.id");
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $data[] = array(
             'id' => $row["id"],
             'drink_name' => $row["drink_name"],
@@ -201,14 +196,15 @@ function get_drink_info($pdo)
     return $data;
 }
 
-function get_target_col($data, $target)
+//get_drink_infoで取得した商品一覧の多次元配列から目当てのcolumnの値を取得
+function get_target_column($data, $target)
 {
     if (isset($data) && is_array($data)) {
         $arrTarget = array();
-        foreach ($data as $key1 => $val1) {
-            foreach ($val1 as $key2 => $val2) {
-                if ($key2 == $target) {
-                    $arrTarget[] = $val2;
+        foreach ($data as $key => $data_array) {
+            foreach ($data_array as $column_key => $val) {
+                if ($val == $target) {
+                    $arrTarget[] = $val;
                 }
             }
         }
@@ -218,7 +214,7 @@ function get_target_col($data, $target)
     }
 }
 
-//管理ページ商品一覧出力用関数
+//toolページ商品一覧出力用関数
 function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $price_vars = NULL, $drink_img_path_vars = NULL, $status_vars = NULL)
 {
     $i = 0;
@@ -227,12 +223,7 @@ function display_productItem_tools($data, $id_vars = NULL, $name_vars = NULL, $p
             //非公開用のクラスをセット
             $status_class[$i] = $status_vars[$i] == 0 ? "is-hidden" : NULL;
             //公開非公開用ボタンのvalueをセット
-            $status_reverse_value = array();
-            if ($status_vars[$i] === "0") {
-                $status_reverse_value[$i] = 1;
-            } else {
-                $status_reverse_value[$i] = 0;
-            }
+            $status_reverse_value[$i] = $status_vars[$i] === "0" ? 1 : 0;
 
             $productItem = <<<HTML
                 <li class="productsItem {$status_class[$i]}">
@@ -330,6 +321,7 @@ function display_product_result()
 }
 
 
+//データのエスケープ処理　//渡されたデータが配列なら再起処理で個々の値エスケープする。
 function escape($vars)
 {
     if (is_array($vars)) {

@@ -173,11 +173,11 @@ if($submit_status){
         <ul class="productsItems js-productsItems">
             <?php
 
-            $id_array = get_target_col($drink_info,'id');
-            $name_array = get_target_col($drink_info,'drink_name');
-            $price_array = get_target_col($drink_info,'drink_price');
-            $drink_img_path_array = get_target_col($drink_info,'drink_img_path');
-            $status_array = get_target_col($drink_info,'status');
+            $id_array = get_target_column($drink_info,'id');
+            $name_array = get_target_column($drink_info,'drink_name');
+            $price_array = get_target_column($drink_info,'drink_price');
+            $drink_img_path_array = get_target_column($drink_info,'drink_img_path');
+            $status_array = get_target_column($drink_info,'status');
             display_productItem_tools($drink_info,$id_array,$name_array,$price_array,$drink_img_path_array,$status_array);
 
             ?>

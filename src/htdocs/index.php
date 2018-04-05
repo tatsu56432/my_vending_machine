@@ -19,12 +19,6 @@ if ($submit_purchase) {
        'inputed_coin' => $purchased_drink_id,
     );
 
-
-
-
-
-
-
     update_inventory_control_by_purchase($pdo,$purchased_drink_id);
 
 //    header("Location:" . TOOL_PAGE);
@@ -66,12 +60,12 @@ if ($submit_purchase) {
             <ul class="productsItems">
                 <?php
 
-                $id_array = get_target_col($drink_info, 'id');
-                $name_array = get_target_col($drink_info, 'drink_name');
-                $price_array = get_target_col($drink_info, 'drink_price');
-                $drink_img_path_array = get_target_col($drink_info, 'drink_img_path');
-                $status_array = get_target_col($drink_info, 'status');
-                $num_of_stock = get_target_col($drink_info, 'num_of_stock');
+                $id_array = get_target_column($drink_info, 'id');
+                $name_array = get_target_column($drink_info, 'drink_name');
+                $price_array = get_target_column($drink_info, 'drink_price');
+                $drink_img_path_array = get_target_column($drink_info, 'drink_img_path');
+                $status_array = get_target_column($drink_info, 'status');
+                $num_of_stock = get_target_column($drink_info, 'num_of_stock');
                 display_productItem_index($drink_info, $id_array, $name_array, $price_array, $drink_img_path_array, $status_array, $num_of_stock);
 
                 ?>
