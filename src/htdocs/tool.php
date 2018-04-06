@@ -28,14 +28,17 @@ if ($submit) {
     } else {
         $image = false;
     }
-//    $image = isset($_SESSION['image']) ? $_FILES['image'] : NULL;
     $status = isset($_SESSION['status']) ? $_POST['status'] : NULL;
 
+
+    $img_object = getimagesize($_FILES['image']['tmp_name']);
     $posted_drink_data['product_name'] = $product_name;
     $posted_drink_data['price'] = $price;
     $posted_drink_data['num'] = $num;
-    $posted_drink_data['image'] = $image;
+    $posted_drink_data['image'] = $img_object['mime'];
     $posted_drink_data['status'] = $status;
+
+
 
     $error = validation_tool($posted_drink_data);
 
@@ -43,8 +46,6 @@ if ($submit) {
         $data = array();
         $data['error'] = $error;
         escape($data['error']);
-
-
     } else {
 
         $insert_data = array();

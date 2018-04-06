@@ -352,7 +352,16 @@ function validation_tool($input = null)
     $num = isset($input['num']) ? $input['num'] : null;
     $image = isset($input['image']) ? $input['image'] : null;
     $status = isset($input['status']) ? $input['status'] : null;
-    $stock = isset($input['stock']) ? $input['stock'] : null;
+
+    echo $image;
+
+    $extension_array = array(
+        'jpg' => 'image/jpeg',
+        'png' => 'image/png'
+    );
+
+    //画像拡張子判別用
+    $img_extension = array_search($image, $extension_array, true);
 
 
     $name = trim($name);
@@ -374,6 +383,8 @@ function validation_tool($input = null)
     }
     if (empty($image)) {
         $error['image'] = '画像を入力してください';
+    }elseif($img_extension === 'image/png' || $img_extension === 'image/jpeg'){
+        $error['image'] = '画像はpngかjpegを使用してください。';
     }
 
     if (empty($status)) {
@@ -426,6 +437,7 @@ function validation_index($post_data, $product_price)
 
         $product_id = isset($post_data[0]['purchased_drink_id']) ? $post_data[0]['purchased_drink_id'] : NULL;
         $coin = isset($post_data[0]['inputed_coin']) ? $post_data[0]['inputed_coin'] : NULL;
+
 
 
 
