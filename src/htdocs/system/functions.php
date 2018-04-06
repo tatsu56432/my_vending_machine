@@ -353,16 +353,11 @@ function validation_tool($input = null)
     $image = isset($input['image']) ? $input['image'] : null;
     $status = isset($input['status']) ? $input['status'] : null;
 
-    echo $image;
-
+    //拡張子識別用配列
     $extension_array = array(
         'jpg' => 'image/jpeg',
         'png' => 'image/png'
     );
-
-    //画像拡張子判別用
-    $img_extension = array_search($image, $extension_array, true);
-
 
     $name = trim($name);
     $price = trim($price);
@@ -374,17 +369,18 @@ function validation_tool($input = null)
     if (empty($price)) {
         $error['price'] = '値段が入力されていません';
     } elseif (!is_numeric($price)) {
-        $error['price'] = '値段は数値で入力してください';
+        $error['price'] = '値段は半角数値で入力してください';
     }
     if (empty($num)) {
         $error['num'] = '在庫数が入力されていません';
     } elseif (!is_numeric($num)) {
-        $error['num'] = '在庫数は数値で入力してください';
+        $error['num'] = '在庫数は半角数値で入力してください';
     }
     if (empty($image)) {
         $error['image'] = '画像を入力してください';
-    }elseif($img_extension === 'image/png' || $img_extension === 'image/jpeg'){
-        $error['image'] = '画像はpngかjpegを使用してください。';
+    }
+    if (!in_array($image, $extension_array)){
+        $error['image'] = '画像はpngかjpegを使用してください';
     }
 
     if (empty($status)) {
@@ -437,9 +433,6 @@ function validation_index($post_data, $product_price)
 
         $product_id = isset($post_data[0]['purchased_drink_id']) ? $post_data[0]['purchased_drink_id'] : NULL;
         $coin = isset($post_data[0]['inputed_coin']) ? $post_data[0]['inputed_coin'] : NULL;
-
-
-
 
 
         if(!isset($coin)){
