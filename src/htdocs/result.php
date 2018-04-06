@@ -1,12 +1,25 @@
 <?php
 session_start();
 
+require_once 'system/define.php';
+require_once 'system/functions.php';
+
+$pdo = get_db_connect();
+$drink_info = get_drink_info($pdo);
+$_POST = escape($_POST);
+
+
 
 
 $_SESSION['coin'] = isset($_SESSION['coin']) ? $_SESSION['coin'] : NULL;
 $_SESSION['product_radio'] = isset($_SESSION['coin']) ? $_SESSION['product_radio'] : NULL;
 
-var_dump($_SESSION['coin'],$_SESSION['product_radio']);
+$post_id = $_SESSION['product_radio'];
+$purchased_drink_data = get_product_purchased($pdo,$post_id);
+
+$coin_put = intval($_SESSION['coin']);
+$product_price = intval($purchased_drink_data["drink_price"]);
+$difference_money = $coin_put - $product_price;
 
 $_SESSION = array();
 session_destroy();
@@ -27,15 +40,13 @@ session_destroy();
 </head>
 <body>
 <p>自動販売機結果</p>
-
-<?php  var_dump($_POST); ?>
-
 <div class="puchase_result">
+
     <p class="thumbnail">
-        <img src="assets/img/uploads/" alt="">
+        <img src="<?php if(isset($purchased_drink_data['drink_img_path'])) echo  $purchased_drink_data['drink_img_path']; ?>" alt="">
     </p>
-    <p>がしゃん！<?php echo $product_name;?>が買えました！</p>
-    <p>おつりは900円です！</p>
+    <p>がしゃん！!!<?php echo $purchased_drink_data['drink_name'];?>が買えました！</p>
+    <p>おつりは<?php echo $difference_money;?>円です！</p>
 </div>
 
 

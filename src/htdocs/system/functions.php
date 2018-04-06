@@ -183,12 +183,36 @@ function update_drink_info($pdo, $update_data)
 function get_drink_info($pdo)
 {
     $data = array();
-    $smtm = $pdo->query("SET NAMES utf8;");
+    $statement = $pdo->query("SET NAMES utf8;");
 
     //tableの内部結合
     $statement = $pdo->query("SELECT drink_info.*,inventory_control.num_of_stock FROM drink_info INNER JOIN inventory_control ON drink_info.id = inventory_control.id");
     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $data[] = array(
+            'id' => $row["id"],
+            'drink_name' => $row["drink_name"],
+            'drink_price' => $row["drink_price"],
+            'drink_img_path' => $row["drink_img_path"],
+            'created_at' => $row["created_at"],
+            'updated_at' => $row["updated_at"],
+            'status' => $row["status"],
+            'num_of_stock' => $row["num_of_stock"]
+        );
+    }
+    return $data;
+}
+
+function get_product_purchased($pdo,$post_id)
+{
+    $data = array();
+    $id = $post_id;
+    $id = intval($id);
+    $statement = $pdo->query("SET NAMES utf8;");
+    $statement = $pdo->prepare('SELECT * FROM drink_info WHERE id = ?');
+    $statement->execute(array($id));
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)){
+        //idに一致した1件の商品のみ返ってくることを想定するので、多次元配列にはしない。
+        $data = array(
             'id' => $row["id"],
             'drink_name' => $row["drink_name"],
             'drink_price' => $row["drink_price"],
@@ -321,11 +345,7 @@ HTML;
 
 }
 
-function display_product_result()
-{
 
-
-}
 
 
 //データのエスケープ処理　//渡されたデータが配列なら再起処理で個々の値エスケープする。
